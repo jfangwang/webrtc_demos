@@ -1,0 +1,6 @@
+Webrtc_demos was created in March 2021 to show case the capabilites of webrtc technology and how other technologies can
+be incorporated. I believe webrtc technology is underrated and should be explored more because it is easier to build and
+support more devices than a typical app on ios or android. The dream would be having the capability to develop a clone
+of an app that uses servers and have the client be a webapp instead of installing it on a phone.
+
+	Jonathan Wang <2226@holbertonschool.com>
