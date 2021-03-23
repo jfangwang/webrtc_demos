@@ -25,7 +25,7 @@ const styles = {
 
 class App extends React.Component {
   state = {
-    index: 0,
+    index: 1,
   };
 
   handleChange = (event, value) => {
@@ -43,7 +43,7 @@ class App extends React.Component {
   render() {
     const { index } = this.state;
     return (
-      <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex} enableMouseEvents>
+      <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex} enableMouseEvents ignoreNativeScroll='true'>
         <div style={Object.assign({}, styles.slide, styles.slide1)} className="messages"><Messages /></div>
         <div style={Object.assign({}, styles.slide, styles.slide2)} className="camera"><Camera /></div>
         <div style={Object.assign({}, styles.slide, styles.slide3)} className="discover">Discover</div>
