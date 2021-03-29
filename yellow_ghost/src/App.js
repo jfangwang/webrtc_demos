@@ -24,8 +24,25 @@ const styles = {
 };
 
 class App extends React.Component {
-  state = {
-    index: 1,
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      index: 1,
+      height: 0,
+      width: 0
+    };
+    window.addEventListener("resize", this.update);
+  }
+
+  componentDidMount() {
+    this.update();
+  }
+
+  update = () => {
+    this.setState({
+      width: window.innerWidth,
+    });
   };
 
   handleChange = (event, value) => {
