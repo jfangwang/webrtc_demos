@@ -29,8 +29,8 @@ class App extends React.Component {
 
     this.state = {
       index: 1,
-      height: 0,
-      width: 0
+      height: window.innerHeight,
+      width: window.innerWidth
     };
     window.addEventListener("resize", this.update);
   }
@@ -60,7 +60,7 @@ class App extends React.Component {
   render() {
     const { index } = this.state;
     return (
-      <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex} enableMouseEvents ignoreNativeScroll='true'>
+      <SwipeableViews style={Object.assign({width: this.state.width, height: this.state.height})} index={index} onChangeIndex={this.handleChangeIndex} enableMouseEvents ignoreNativeScroll='true'>
         <div style={Object.assign({}, styles.slide, styles.slide1)} className="messages"><Messages /></div>
         <div style={Object.assign({}, styles.slide, styles.slide2)} className="camera"><Camera /></div>
         <div style={Object.assign({}, styles.slide, styles.slide3)} className="discover">Discover</div>
