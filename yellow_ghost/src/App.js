@@ -9,8 +9,7 @@ import Camera from './Camera.js';
 const styles = {
   slide: {
     color: '#fff',
-    height: window.innerHeight,
-    width: window.innerWidth
+
   },
   slide1: {
     background: '#FEA900',
