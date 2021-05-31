@@ -15,8 +15,9 @@ const videoConstraints = {
 const sendPost = () => {
   const id = uuid();
   const uploadTask = storage
-    .ref(`posts/${id}`)
+    .ref(`posts/${id}`);
     // .putString(cameraImage, 'data_url');
+  console.log("Send post working");
 };
 
 const WebcamCapture = () => {
@@ -29,6 +30,10 @@ const WebcamCapture = () => {
     console.log(imageSrc)
   }, [webcamRef, setImgSrc]);
 
+  const reset = React.useCallback(() => {
+    setImgSrc(imgSrc);
+  }, [webcamRef, setImgSrc]);
+
   return (
     <div class="body">
       <Webcam
@@ -38,12 +43,11 @@ const WebcamCapture = () => {
         videoConstraints={videoConstraints}
         mirrored={true}
       />
-      {imgSrc && (
-        <img
+      <img
           class="capture-img"
           src={imgSrc}
         />
-      )}
+      <button onClick={reset} class="reset">reset</button>
       <button onClick={capture} class="capture">Caputure</button>
       <button onClick={sendPost} class="send-to">Send to</button>
     </div>
