@@ -4,8 +4,38 @@ import './Camera.css';
 
 const videoConstraints = {
     facingMode: "user",
+    height: window.innerHeight,
+    width: window.innerWidth,
 };
 
+const WebcamCapture = () => {
+  const webcamRef = React.useRef(null);
+  const [imgSrc, setImgSrc] = React.useState(null);
+
+  const capture = React.useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImgSrc(imageSrc);
+  }, [webcamRef, setImgSrc]);
+
+  return (
+    <div class="body">
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        videoConstraints={videoConstraints}
+        mirrored={true}
+      />
+      <button onClick={capture} class="capture">Button</button>
+      {imgSrc && (
+        <img
+          class="capture-img"
+          src={imgSrc}
+        />
+      )}
+    </div>
+  );
+};
 class Camera extends React.Component {
     constructor(props) {
         super(props);
@@ -28,13 +58,19 @@ class Camera extends React.Component {
         });
     };
 
+
     render() {
         return (
-                <Webcam
-                    videoConstraints={videoConstraints}
-                    height={this.state.height}
-                    width={this.state.width}
-                />
+            // <div class="body">
+            //     <Webcam
+            //         videoConstraints={videoConstraints}
+            //         height={this.state.height}
+            //         width={this.state.width}
+            //         mirrored={true}
+            //     />
+            //     <button class="capture"></button>
+            // </div>
+            <WebcamCapture/>
         );
     }
 }
