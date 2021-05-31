@@ -1,24 +1,29 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 import './App.css';
 import Messages from './Messages.js';
 import Camera from './Camera.js';
+import FaceDetection from './FaceDetection.js';
+
 
 const styles = {
   slide: {
     color: '#fff',
-
   },
   slide1: {
-    background: '#FEA900',
+    background: 'MediumSeaGreen',
   },
   slide2: {
-    background: '#B3DC4A',
+    background: 'ForestGreen',
   },
   slide3: {
-    background: '#6AC0FF',
+    background: 'DodgerBlue',
+  },
+  slide4: {
+    background: 'DeepPink',
   }
 };
 
@@ -41,6 +46,7 @@ class App extends React.Component {
   update = () => {
     this.setState({
       width: window.innerWidth,
+      height: window.innerHeight
     });
   };
 
@@ -60,9 +66,30 @@ class App extends React.Component {
     const { index } = this.state;
     return (
       <SwipeableViews style={Object.assign({width: this.state.width, height: this.state.height})} index={index} onChangeIndex={this.handleChangeIndex} enableMouseEvents ignoreNativeScroll='true'>
-        <div style={Object.assign({}, styles.slide, styles.slide1)} className="messages"><Messages /></div>
-        <div style={Object.assign({}, styles.slide, styles.slide2)} className="camera"><Camera /></div>
-        <div style={Object.assign({}, styles.slide, styles.slide3)} className="discover">Discover</div>
+        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide1)} className="messages">
+          <Helmet>
+            <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
+          </Helmet>
+          <Messages />
+        </div>
+        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide2)} className="faceDetection">
+          <Helmet>
+            <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
+          </Helmet>
+          <FaceDetection />
+        </div>
+        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide3)} className="camera">
+          <Helmet>
+            <meta name="viewport" content="height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
+          </Helmet>
+          <Camera />
+        </div>
+        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide4)} className="discover">
+          <Helmet>
+            <meta name="viewport" content="height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
+          </Helmet>
+          <p>Discover</p>
+        </div>
       </SwipeableViews>
     );
   }
