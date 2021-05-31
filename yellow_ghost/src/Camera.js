@@ -15,6 +15,7 @@ const WebcamCapture = () => {
   const capture = React.useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
+    console.log(imageSrc)
   }, [webcamRef, setImgSrc]);
 
   return (
@@ -26,13 +27,13 @@ const WebcamCapture = () => {
         videoConstraints={videoConstraints}
         mirrored={true}
       />
-      <button onClick={capture} class="capture">Button</button>
       {imgSrc && (
         <img
           class="capture-img"
           src={imgSrc}
         />
       )}
+      <button onClick={capture} class="capture">Button</button>
     </div>
   );
 };
