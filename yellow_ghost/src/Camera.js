@@ -1,11 +1,22 @@
 import React from 'react';
 import Webcam from "react-webcam";
 import './Camera.css';
+import { v4 as uuid } from "uuid";
+import { storage } from "./firebase.js";
+
+
 
 const videoConstraints = {
     facingMode: "user",
     height: window.innerHeight,
     width: window.innerWidth,
+};
+
+const sendPost = () => {
+  const id = uuid();
+  const uploadTask = storage
+    .ref(`posts/${id}`)
+    // .putString(cameraImage, 'data_url');
 };
 
 const WebcamCapture = () => {
@@ -33,7 +44,8 @@ const WebcamCapture = () => {
           src={imgSrc}
         />
       )}
-      <button onClick={capture} class="capture">Button</button>
+      <button onClick={capture} class="capture">Caputure</button>
+      <button onClick={sendPost} class="send-to">Send to</button>
     </div>
   );
 };

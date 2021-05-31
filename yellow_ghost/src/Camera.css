@@ -11,3 +11,7 @@
     position: absolute;
     top: 0%;
 }
+.send-to {
+    position: absolute;
+    bottom: 10%;
+}
