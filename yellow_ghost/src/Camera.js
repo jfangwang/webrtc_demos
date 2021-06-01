@@ -49,6 +49,7 @@ const ReactFireBaseUpload = () => {
 
 const WebcamCapture = () => {
   const webcamRef = React.useRef(null);
+  const reset_img = React.useRef(null);
   const [imgSrc, setImgSrc] = React.useState(null);
 
   const capture = React.useCallback(() => {
@@ -58,7 +59,7 @@ const WebcamCapture = () => {
   }, [webcamRef, setImgSrc]);
 
   const reset = React.useCallback(() => {
-    setImgSrc(imgSrc);
+    setImgSrc(reset_img);
   }, [webcamRef, setImgSrc]);
 
   const sendPost = () => {

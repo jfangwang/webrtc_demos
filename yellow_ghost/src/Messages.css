@@ -1,3 +1,9 @@
 div {
-    background: 'MediumSeaGreen',
+    background: 'MediumSeaGreen';
+}
+.chat {
+    background-color: tomato;
+    padding: 100px;
+    border: turquoise 2px dashed;
+    color: white;
 }
