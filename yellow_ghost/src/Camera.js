@@ -2,8 +2,8 @@ import React from 'react';
 import Webcam from "react-webcam";
 import './Camera.css';
 import { v4 as uuid } from "uuid";
-import { storage } from "./firebase.js";
-
+import { db, storage } from "./firebase.js";
+import firebase from 'firebase';
 
 
 const videoConstraints = {
@@ -12,13 +12,40 @@ const videoConstraints = {
     width: window.innerWidth,
 };
 
-const sendPost = () => {
-  const id = uuid();
-  const uploadTask = storage
-    .ref(`posts/${id}`);
-    // .putString(cameraImage, 'data_url');
-  console.log("Send post working");
-};
+const ReactFireBaseUpload = () => {
+  const [image, setImage] = React.useState(null);
+  const handleChange = e => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0])
+    }
+  };
+  const handleUpload = () => {
+    const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    uploadTask.on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("images")
+          .child(image.name)
+          .getDownloadURL()
+          .then(url => {
+            console.log(url);
+          })
+      }
+    )
+  };
+  console.log("image: ", image);
+  return (
+    <div>
+      <input class="file-upload" type="file" onChange={handleChange}/>
+      <button onClick={handleUpload}>upload</button>
+    </div>
+  );
+}
 
 const WebcamCapture = () => {
   const webcamRef = React.useRef(null);
@@ -27,12 +54,41 @@ const WebcamCapture = () => {
   const capture = React.useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
-    console.log(imageSrc)
+    console.log(webcamRef)
   }, [webcamRef, setImgSrc]);
 
   const reset = React.useCallback(() => {
     setImgSrc(imgSrc);
   }, [webcamRef, setImgSrc]);
+
+  const sendPost = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImgSrc(imageSrc);
+    const id = uuid();
+    const uploadTask = storage.ref(`posts/${id}`).putString(imageSrc, 'data_url');
+    uploadTask.on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("posts")
+          .child(id)
+          .getDownloadURL()
+          .then(url => {
+            console.log(url);
+            db.collection('posts').add({
+              imageURL: url,
+              username: "JFANGWANG",
+              read: false,
+              timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+            })
+          })
+      }
+    )
+  };
 
   return (
     <div class="body">
@@ -75,7 +131,6 @@ class Camera extends React.Component {
         });
     };
 
-
     render() {
         return (
             // <div class="body">
@@ -88,6 +143,7 @@ class Camera extends React.Component {
             //     <button class="capture"></button>
             // </div>
             <WebcamCapture/>
+            //<ReactFireBaseUpload/>
         );
     }
 }
