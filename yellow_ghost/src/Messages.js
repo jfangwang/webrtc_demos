@@ -1,17 +1,26 @@
 import React, { useEffect } from 'react';
 import './Messages.css';
 import { db } from './firebase';
+import ReactTimeago from 'react-timeago';
 
 function Chat({id, username, timeStamp, imageURL, read}) {
+    const open = () => {
+        if (!read) {
+            db.collection('posts').doc(id).set({
+                read: true
+            },
+            { merge: true }
+            );
+        }
+    }
+
+
     return (
-        <div>
-            <div>
-                <h4>Username: {username}</h4>
-                <p>Tap to view - {new Date(timeStamp?.toDate()).toUTCString()}</p>
-                <p>imageUrl: {imageURL}</p>
-                {!read && <p>Read status: NEW</p>}
-                {read && <p>Read status: OLD</p>}
-            </div>
+        <div className="Chat">
+            <h4>{username}</h4>
+            {/* <p>imageUrl: {imageURL}</p> */}
+            {!read && <p>NEW SNAP | <ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
+            {read && <p>OLD SNAP</p>}
         </div>
     )
 }
@@ -34,7 +43,10 @@ function Chats() {
 
     return (
         <div>
-            <div className='chat'>
+            <div className="nav-bar">
+                CHAT
+            </div>
+            <div>
                 {posts.map(({id, data: { username, timeStamp, imageURL, read}}) => (
                     <Chat
                         id={id}

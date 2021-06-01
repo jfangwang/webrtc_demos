@@ -106,7 +106,7 @@ const WebcamCapture = () => {
         />
       <button onClick={reset} class="reset">reset</button>
       <button onClick={capture} class="capture">Caputure</button>
-      <button onClick={sendPost} class="send-to">Send to</button>
+      <button onClick={sendPost} class="send-to">Send</button>
     </div>
   );
 };
