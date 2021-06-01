@@ -1,26 +1,57 @@
 import React, { useEffect } from 'react';
 import './Messages.css';
-import { db } from './firebase';
+import { db, storage } from './firebase';
 import ReactTimeago from 'react-timeago';
 
 function Chat({id, username, timeStamp, imageURL, read}) {
+    var opened = false;
     const open = () => {
-        if (!read) {
-            db.collection('posts').doc(id).set({
-                read: true
-            },
-            { merge: true }
-            );
-        }
+        const photo = storage.ref(`posts/${id}`).getDownloadURL()
+        .then((url) => {
+            var img = document.getElementById('photo');
+            img.setAttribute('src', url);
+            opened = true;
+        })
+        .catch((error) => {
+            // Handle any errors
+            console.log("COULD NOT GET PHOTO")
+        });
+        // if (!read) {
+        //     db.collection('posts').doc(id).set({
+        //         read: true
+        //     },
+        //     { merge: true }
+        //     );
+        // }
     }
 
+    const close = () => {
+        const photo = storage.ref(`posts/${id}`).delete()
+        .then((url) => {
+            var img = document.getElementById('photo');
+            img.setAttribute('src', url);
+            console.log("PHOTO DELETED")
+        })
+        .catch((error) => {
+            // Handle any errors
+            console.log("COULD NOT GET PHOTO")
+        });
+    }
 
     return (
-        <div className="Chat">
+        <div>
+            <div className="Chat">
             <h4>{username}</h4>
-            {/* <p>imageUrl: {imageURL}</p> */}
+            <p> ID: {id}</p>
             {!read && <p>NEW SNAP | <ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
-            {read && <p>OLD SNAP</p>}
+            {read && <p>OPENED</p>}
+            <button onClick={open}>open</button>
+            <button onClick={close} className="close">close</button>
+            <img
+            id="photo"
+            />
+            </div>
+
         </div>
     )
 }
@@ -34,7 +65,6 @@ function Chats() {
         .onSnapshot((snapshot) =>
             setPosts(
                 snapshot.docs.map((doc) => ({
-                    id: doc.id,
                     data: doc.data(),
                 }))
             )
@@ -47,7 +77,7 @@ function Chats() {
                 CHAT
             </div>
             <div>
-                {posts.map(({id, data: { username, timeStamp, imageURL, read}}) => (
+                {posts.map(({data: { id, username, timeStamp, imageURL, read}}) => (
                     <Chat
                         id={id}
                         username={username}

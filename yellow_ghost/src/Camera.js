@@ -81,6 +81,7 @@ const WebcamCapture = () => {
           .then(url => {
             console.log(url);
             db.collection('posts').add({
+              id: id,
               imageURL: url,
               username: "JFANGWANG",
               read: false,
