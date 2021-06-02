@@ -80,7 +80,7 @@ const WebcamCapture = () => {
           .getDownloadURL()
           .then(url => {
             console.log(url);
-            db.collection('posts').add({
+            db.collection('posts').doc(id).set({
               id: id,
               imageURL: url,
               username: "JFANGWANG",

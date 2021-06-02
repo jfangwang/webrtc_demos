@@ -4,38 +4,34 @@ import { db, storage } from './firebase';
 import ReactTimeago from 'react-timeago';
 
 function Chat({id, username, timeStamp, imageURL, read}) {
-    var opened = false;
+    var show_img = false;
+    var img = document.getElementById('photo');
     const open = () => {
         const photo = storage.ref(`posts/${id}`).getDownloadURL()
         .then((url) => {
-            var img = document.getElementById('photo');
             img.setAttribute('src', url);
-            opened = true;
+            console.log("OPENING: ", id)
         })
         .catch((error) => {
             // Handle any errors
             console.log("COULD NOT GET PHOTO")
         });
-        // if (!read) {
-        //     db.collection('posts').doc(id).set({
-        //         read: true
-        //     },
-        //     { merge: true }
-        //     );
-        // }
     }
 
     const close = () => {
         const photo = storage.ref(`posts/${id}`).delete()
         .then((url) => {
-            var img = document.getElementById('photo');
-            img.setAttribute('src', url);
-            console.log("PHOTO DELETED")
+            console.log("Deleted from storage: ", id);
         })
         .catch((error) => {
-            // Handle any errors
-            console.log("COULD NOT GET PHOTO")
+            console.log("TRIED DELETING: ", id)
         });
+        db.collection('posts').doc(id).delete().then(() => {
+            console.log("Deleted from firestore");
+        }).catch((error) => {
+            console.error("Error removing document: ", error);
+        });
+        img.removeAttribute('src');
     }
 
     return (
@@ -51,7 +47,6 @@ function Chat({id, username, timeStamp, imageURL, read}) {
             id="photo"
             />
             </div>
-
         </div>
     )
 }
