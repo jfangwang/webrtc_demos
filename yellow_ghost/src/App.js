@@ -7,6 +7,7 @@ import { bindKeyboard } from 'react-swipeable-views-utils';
 import './App.css';
 import Messages from './Messages.js';
 import Camera from './Camera.js';
+import Auth from './Auth.js';
 import FaceDetection from './FaceDetection.js';
 
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
@@ -73,6 +74,7 @@ class App extends React.Component {
             <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
           </Helmet>
           <Messages />
+          <Auth/>
         </div>
         <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide3)} className="camera">
           <Helmet>
