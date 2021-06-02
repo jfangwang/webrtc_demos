@@ -14,7 +14,7 @@ function Chat({id, username, timeStamp, imageURL, read}) {
         })
         .catch((error) => {
             // Handle any errors
-            console.log("COULD NOT GET PHOTO")
+            console.log("COULD NOT GET PHOTO ", error)
         });
     }
 
@@ -36,16 +36,12 @@ function Chat({id, username, timeStamp, imageURL, read}) {
 
     return (
         <div>
-            <div className="Chat">
+            <div className="Chat" onClick={open}>
             <h4>{username}</h4>
             <p> ID: {id}</p>
             {!read && <p>NEW SNAP | <ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
             {read && <p>OPENED</p>}
-            <button onClick={open}>open</button>
-            <button onClick={close} className="close">close</button>
-            <img
-            id="photo"
-            />
+            <img id="photo" onClick={close}/>
             </div>
         </div>
     )

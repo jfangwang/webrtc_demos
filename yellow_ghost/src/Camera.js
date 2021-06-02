@@ -90,6 +90,12 @@ const WebcamCapture = () => {
           })
       }
     )
+    setTimeout(function () {
+      if (false) {
+        console.log("waiting");
+      }
+    }, 5000);
+    reset();
   };
 
   return (

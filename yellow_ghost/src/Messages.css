@@ -32,3 +32,8 @@ h4, p {
     right:5%;
     top:1%;
 }
+.photo{
+    position: absolute;
+    top:0%;
+    left: 0%;
+}
