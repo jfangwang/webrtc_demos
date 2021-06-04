@@ -24,7 +24,7 @@ function LoginButton(props) {
   }
 
   function GuestGreeting(props) {
-    return <h1>Please sign up.</h1>;
+    return <h1></h1>;
   }
 
   function Greeting(props) {
@@ -40,8 +40,20 @@ class Auth extends Component {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
-        this.state = {loggedIn: false, user:null};
+        this.state = {loggedIn: false, user:null, photoURL:null};
+        // firebase.auth().onAuthStateChanged(function(user) {
+        //   if (user) {
+        //     this.setState({photoURL: user.photoURL})
+        //     var img = document.getElementById("profile-pic");
+        //     img.setAttribute('src', this.state.photoURL);
+        //   } else {
+        //     this.setState({photoURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png"})
+        //     var img = document.getElementById("profile-pic");
+        //     img.setAttribute('src', this.state.photoURL);
+        //   }
+        // });
     }
+
 
     handleLogin() {
         this.setState({loggedIn: true});
@@ -49,10 +61,10 @@ class Auth extends Component {
         .then((result) => {
             const name = result.user.displayName;
             const email = result.user.email;
-            const photoURL = result.user.photoURL;
+            this.setState({photoURL: result.user.photoURL});
             var img = document.getElementById("profile-pic");
-            img.setAttribute('src', photoURL);
-            console.log(name, email, photoURL);
+            img.setAttribute('src', this.state.photoURL);
+            console.log(name, email, this.state.photoURL);
         })
         .catch((error) => alert(error.message));
 
@@ -91,7 +103,7 @@ class Auth extends Component {
             <div>
                 <Greeting loggedIn={loggedIn} />
                 {button}
-                <button onClick={this.getUser}>Get User</button>
+                {/* <button onClick={this.getUser}>Get User</button> */}
                 <img id="profile-pic"></img>
             </div>
         );

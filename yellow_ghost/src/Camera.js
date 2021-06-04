@@ -1,160 +1,97 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Webcam from "react-webcam";
-import './Camera.css';
 import { v4 as uuid } from "uuid";
-import { db, storage } from "./firebase.js";
+import './Camera.css';
+import { storage, db } from './firebase';
 import firebase from 'firebase';
-import { auth, provider } from './firebase';
 
-
-const videoConstraints = {
-    facingMode: "user",
-    height: window.innerHeight,
-    width: window.innerWidth,
-};
-
-const ReactFireBaseUpload = () => {
-  const [image, setImage] = React.useState(null);
-  const handleChange = e => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0])
-    }
-  };
-  const handleUpload = () => {
-    const uploadTask = storage.ref(`images/${image.name}`).put(image);
-    uploadTask.on(
-      "state_changed",
-      snapshot => {},
-      error => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("images")
-          .child(image.name)
-          .getDownloadURL()
-          .then(url => {
-            console.log(url);
-          })
-      }
-    )
-  };
-  console.log("image: ", image);
-  return (
-    <div>
-      <input class="file-upload" type="file" onChange={handleChange}/>
-      <button onClick={handleUpload}>upload</button>
-    </div>
-  );
-}
-
-const WebcamCapture = () => {
-  const webcamRef = React.useRef(null);
-  const reset_img = React.useRef(null);
-  const [imgSrc, setImgSrc] = React.useState(null);
-
-  const capture = React.useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImgSrc(imageSrc);
-    console.log(webcamRef)
-  }, [webcamRef, setImgSrc]);
-
-  const reset = React.useCallback(() => {
-    setImgSrc(reset_img);
-  }, [webcamRef, setImgSrc]);
-
-  const sendPost = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImgSrc(imageSrc);
-    const id = uuid();
-    var user = firebase.auth().currentUser;
-    const uploadTask = storage.ref(`posts/${id}`).putString(imageSrc, 'data_url');
-    uploadTask.on(
-      "state_changed",
-      snapshot => {},
-      error => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("posts")
-          .child(id)
-          .getDownloadURL()
-          .then(url => {
-            console.log(url);
-            db.collection('posts').doc(id).set({
-              id: id,
-              imageURL: url,
-              username: user.email,
-              read: false,
-              timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-            })
-          })
-      }
-    )
-    setTimeout(function () {
-      if (false) {
-        console.log("waiting");
-      }
-    }, 5000);
-    reset();
-  };
-
-  return (
-    <div class="body">
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        videoConstraints={videoConstraints}
-        mirrored={true}
-      />
-      <img
-          class="capture-img"
-          src={imgSrc}
-        />
-      <button onClick={reset} class="reset">reset</button>
-      <button onClick={capture} class="capture">Caputure</button>
-      <button onClick={sendPost} class="send-to">Send</button>
-    </div>
-  );
-};
-class Camera extends React.Component {
+class Camera extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            height: 0,
-            width: 0
-        };
+            width: window.innerWidth,
+            height: window.innerHeight,
+            image: null
+        }
         window.addEventListener("resize", this.update);
     }
 
-    componentDidMount() {
-        this.update();
-    }
-
     update = () => {
-        this.setState ({
-            height: window.innerHeight,
-            width: window.innerWidth,
+        this.setState({
+          width: window.innerWidth,
+          height: window.innerHeight,
+          faceMode: "user"
         });
     };
 
+    send = () => {
+        const id = uuid();
+        var user = firebase.auth().currentUser;
+        const uploadTask = storage.ref(`posts/${id}`).putString(this.state.image, 'data_url');
+        uploadTask.on(
+          "state_changed",
+          snapshot => {},
+          error => {
+            console.log(error);
+          },
+          () => {
+            storage
+              .ref("posts")
+              .child(id)
+              .getDownloadURL()
+              .then(url => {
+                console.log("Photo Sent");
+                db.collection('posts').doc(id).set({
+                  id: id,
+                  imageURL: url,
+                  email: user.email,
+                  name: user.displayName,
+                  photoURL: user.photoURL,
+                  read: false,
+                  timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+              })
+          })
+          this.setState({ image: null});
+    }
+
+    close = () => {
+        this.setState({ image: null })
+    }
+
+    capture = () => {
+        const img = this.webcam.getScreenshot();
+        this.setState({ image: img })
+        console.log(img);
+    }
+
+    setRef = (webcam) => {
+        this.webcam = webcam;
+      };
+
     render() {
         return (
-            // <div class="body">
-            //     <Webcam
-            //         videoConstraints={videoConstraints}
-            //         height={this.state.height}
-            //         width={this.state.width}
-            //         mirrored={true}
-            //     />
-            //     <button class="capture"></button>
-            // </div>
-            <WebcamCapture/>
-            //<ReactFireBaseUpload/>
+            <div>
+                <Webcam
+                    ref={this.setRef}
+                    videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
+                    screenshotFormat="image/jpeg"
+                    audio={false}
+                    mirrored={true}
+                    className="webcam"
+                />
+                { this.state.image ? <img src={this.state.image} alt="asdf"/> : <Webcam
+                    ref={this.setRef}
+                    videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
+                    screenshotFormat="image/jpeg"
+                    audio={false}
+                    mirrored={true}
+                />}
+                { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture}>Capture</button> }
+                { this.state.image ? <button className="send" onClick={this.send}>Send</button> : null}
+            </div>
         );
     }
 }
+
 export default Camera;

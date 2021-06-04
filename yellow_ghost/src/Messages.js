@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import './Messages.css';
-import { db, storage } from './firebase';
+import React, { Component, useEffect } from 'react';
+import { storage, db } from './firebase';
 import ReactTimeago from 'react-timeago';
+import './Messages.css';
 import Auth from './Auth.js';
 
-function Chat({id, username, timeStamp, imageURL, read}) {
-    var img = document.getElementById('photo');
+function Chat({id, email, timeStamp, imageURL, read, photoURL}) {
     const open = () => {
         const photo = storage.ref(`posts/${id}`).getDownloadURL()
         .then((url) => {
+            var img = document.getElementById('photo');
             img.setAttribute('src', url);
             console.log("OPENING: ", id)
         })
@@ -31,14 +31,15 @@ function Chat({id, username, timeStamp, imageURL, read}) {
         }).catch((error) => {
             console.error("Error removing document: ", error);
         });
+        var img = document.getElementById('photo');
         img.removeAttribute('src');
     }
 
     return (
         <div>
             <div className="Chat" onClick={open}>
-            <h4>{username}</h4>
-            <p> ID: {id}</p>
+            <img src={photoURL} className="photoURL"/>
+            <h4>{email}</h4>
             {!read && <p>NEW SNAP | <ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
             {read && <p>OPENED</p>}
             <img id="photo" onClick={close}/>
@@ -63,32 +64,32 @@ function Chats() {
     }, [])
 
     return (
-        <div>
-            <div className="nav-bar">
-                CHAT
-            </div>
-            <div>
-                {posts.map(({data: { id, username, timeStamp, imageURL, read}}) => (
-                    <Chat
-                        id={id}
-                        username={username}
-                        timeStamp={timeStamp}
-                        imageURL={imageURL}
-                        read={read}
-                    />
-                ))}
-            </div>
-
+        <div className="Chats">
+            <header className="navbar">
+                <h1>Chat</h1>
+                <Auth/>
+            </header>
+            {posts.map(({data: { id, email, timeStamp, imageURL, read, photoURL}}) => (
+                <Chat
+                    id={id}
+                    email={email}
+                    timeStamp={timeStamp}
+                    imageURL={imageURL}
+                    read={read}
+                    photoURL={photoURL}
+                />
+            ))}
         </div>
     )
 }
-class Messages extends React.Component {
+
+class Messages extends Component {
     render() {
         return (
-            <div>
+            <body>
                 <Chats/>
-                <Auth/>
-            </div>
+            </body>
+
         );
     }
 }

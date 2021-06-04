@@ -1,15 +1,31 @@
-div {
-    background: 'MediumSeaGreen';
-    color: black;
+body {
+    font-family: Helvetica;
+    width: 100%;
+}
+header {
+    background-color: mediumturquoise;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 100%;
+    position: absolute;
+    top:0%;
+    left:0%;
+}
+.navbar {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+}
+.Chats {
     width: 100%;
 }
 .Chat {
-    border:darkgreen 2px solid;
     display: flex;
     flex-direction: column;
     margin: 0px;
     align-items: end;
     width: 100%;
+    border: 1px darkgreen solid;
 }
 .Chat:hover {
     background-color: darkgreen;
@@ -17,23 +33,13 @@ div {
 h4, p {
     margin: 0px;
 }
-.nav-bar {
+#photo {
     position: absolute;
     top: 0%;
     left: 0%;
-    border: black 1px solid;
-    width: 100%;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    font-size: 30px;
 }
-.close {
-    position: absolute;
-    right:5%;
-    top:1%;
-}
-.photo{
-    position: absolute;
-    top:0%;
-    left: 0%;
+.photoURL {
+    height:50px;
+    width:50px;
+    border-radius: 100%;
 }
