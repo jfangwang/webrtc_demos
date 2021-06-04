@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import './Messages.css';
 import { db, storage } from './firebase';
 import ReactTimeago from 'react-timeago';
+import Auth from './Auth.js';
 
 function Chat({id, username, timeStamp, imageURL, read}) {
-    var show_img = false;
     var img = document.getElementById('photo');
     const open = () => {
         const photo = storage.ref(`posts/${id}`).getDownloadURL()
@@ -87,6 +87,7 @@ class Messages extends React.Component {
         return (
             <div>
                 <Chats/>
+                <Auth/>
             </div>
         );
     }

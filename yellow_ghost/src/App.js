@@ -74,7 +74,6 @@ class App extends React.Component {
             <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
           </Helmet>
           <Messages />
-          <Auth/>
         </div>
         <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide3)} className="camera">
           <Helmet>

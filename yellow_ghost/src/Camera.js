@@ -4,6 +4,7 @@ import './Camera.css';
 import { v4 as uuid } from "uuid";
 import { db, storage } from "./firebase.js";
 import firebase from 'firebase';
+import { auth, provider } from './firebase';
 
 
 const videoConstraints = {
@@ -66,6 +67,7 @@ const WebcamCapture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
     const id = uuid();
+    var user = firebase.auth().currentUser;
     const uploadTask = storage.ref(`posts/${id}`).putString(imageSrc, 'data_url');
     uploadTask.on(
       "state_changed",
@@ -83,7 +85,7 @@ const WebcamCapture = () => {
             db.collection('posts').doc(id).set({
               id: id,
               imageURL: url,
-              username: "JFANGWANG",
+              username: user.email,
               read: false,
               timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
             })
