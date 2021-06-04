@@ -40,20 +40,17 @@ class Auth extends Component {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
-        this.state = {loggedIn: false, user:null, photoURL:null};
-        // firebase.auth().onAuthStateChanged(function(user) {
-        //   if (user) {
-        //     this.setState({photoURL: user.photoURL})
-        //     var img = document.getElementById("profile-pic");
-        //     img.setAttribute('src', this.state.photoURL);
-        //   } else {
-        //     this.setState({photoURL: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png"})
-        //     var img = document.getElementById("profile-pic");
-        //     img.setAttribute('src', this.state.photoURL);
-        //   }
-        // });
+        this.state = {loggedIn: false, user:null, photoURL:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png'};
     }
 
+    componentDidMount() {
+      var img = document.getElementById("profile-pic");
+      var user = firebase.auth().currentUser;
+      if (user) {
+        this.setState({ loggedIn: true });
+      }
+      img.setAttribute('src', this.state.photoURL);
+    }
 
     handleLogin() {
         this.setState({loggedIn: true});
@@ -64,17 +61,16 @@ class Auth extends Component {
             this.setState({photoURL: result.user.photoURL});
             var img = document.getElementById("profile-pic");
             img.setAttribute('src', this.state.photoURL);
-            console.log(name, email, this.state.photoURL);
         })
         .catch((error) => alert(error.message));
 
     }
     handleLogout() {
-        this.setState({loggedIn: false});
         firebase.auth().signOut().then(() => {
-            console.log("signed out");
-            var img = document.getElementById("profile-pic");
-            img.removeAttribute('src');
+          this.setState({loggedIn: false});
+          this.setState({photoURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png'});
+          var img = document.getElementById("profile-pic");
+          img.setAttribute('src', this.state.photoURL);
         }).catch((error) => {
             console.log(error.message);
         });
@@ -104,7 +100,7 @@ class Auth extends Component {
                 <Greeting loggedIn={loggedIn} />
                 {button}
                 {/* <button onClick={this.getUser}>Get User</button> */}
-                <img id="profile-pic"></img>
+                <img id="profile-pic"/>
             </div>
         );
     }

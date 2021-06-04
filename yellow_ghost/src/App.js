@@ -81,18 +81,6 @@ class App extends React.Component {
           </Helmet>
           <Camera />
         </div>
-        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide2)} className="faceDetection">
-          <Helmet>
-            <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
-          </Helmet>
-          <FaceDetection />
-        </div>
-        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide4)} className="discover">
-          <Helmet>
-            <meta name="viewport" content="height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
-          </Helmet>
-          <p>Discover</p>
-        </div>
       </BindKeyboardSwipeableViews>
     );
   }

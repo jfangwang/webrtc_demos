@@ -27,6 +27,18 @@ class Camera extends Component {
     send = () => {
         const id = uuid();
         var user = firebase.auth().currentUser;
+        var email = "GUEST"
+        var name = "GUEST";
+        var photoURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png";
+        if (user){
+          email = user.email;
+          name = user.displayName;
+          photoURL = user.photoURL;
+        } else {
+          email = "GUEST"
+          name = "GUEST";
+          photoURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png";
+        }
         const uploadTask = storage.ref(`posts/${id}`).putString(this.state.image, 'data_url');
         uploadTask.on(
           "state_changed",
@@ -44,9 +56,9 @@ class Camera extends Component {
                 db.collection('posts').doc(id).set({
                   id: id,
                   imageURL: url,
-                  email: user.email,
-                  name: user.displayName,
-                  photoURL: user.photoURL,
+                  email: email,
+                  name: name,
+                  photoURL: photoURL,
                   read: false,
                   timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
                 })
@@ -71,15 +83,7 @@ class Camera extends Component {
 
     render() {
         return (
-            <div>
-                <Webcam
-                    ref={this.setRef}
-                    videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
-                    screenshotFormat="image/jpeg"
-                    audio={false}
-                    mirrored={true}
-                    className="webcam"
-                />
+            <div className="body">
                 { this.state.image ? <img src={this.state.image} alt="asdf"/> : <Webcam
                     ref={this.setRef}
                     videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
