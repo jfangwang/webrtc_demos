@@ -39,8 +39,9 @@ class Camera extends Component {
           name = "GUEST";
           photoURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png";
         }
-        const uploadTask = storage.ref(`posts/${id}`).putString(this.state.image, 'data_url');
-        uploadTask.on(
+        if (this.state.image != null) {
+          const uploadTask = storage.ref(`posts/${id}`).putString(this.state.image, 'data_url');
+          uploadTask.on(
           "state_changed",
           snapshot => {},
           error => {
@@ -65,6 +66,10 @@ class Camera extends Component {
               })
           })
           this.setState({ image: null});
+        } else {
+          console.log("Cannot send image");
+        }
+
     }
 
     close = () => {

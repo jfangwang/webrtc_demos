@@ -2,6 +2,7 @@ import './Auth.css';
 import { auth, provider } from './firebase';
 import firebase from 'firebase';
 import React, { Component } from 'react';
+import { db } from './firebase';
 
 function LoginButton(props) {
     return (
@@ -45,11 +46,16 @@ class Auth extends Component {
 
     componentDidMount() {
       var img = document.getElementById("profile-pic");
-      var user = firebase.auth().currentUser;
-      if (user) {
-        this.setState({ loggedIn: true });
-      }
-      img.setAttribute('src', this.state.photoURL);
+      // var user = firebase.auth().currentUser;
+      // if (user) {
+      //   this.setState({ loggedIn: true });
+      // }
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user != null) {
+          var photoURL = user.photoURL;
+        }
+        img.setAttribute('src', photoURL);
+      });
     }
 
     handleLogin() {
@@ -61,6 +67,21 @@ class Auth extends Component {
             this.setState({photoURL: result.user.photoURL});
             var img = document.getElementById("profile-pic");
             img.setAttribute('src', this.state.photoURL);
+
+            // Adding user to user DB
+
+            db.collection("users").doc(email).set({
+              email: email,
+              name: name,
+              photoURL: result.user.photoURL
+            })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+
         })
         .catch((error) => alert(error.message));
 
