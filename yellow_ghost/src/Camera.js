@@ -5,6 +5,7 @@ import './Camera.css';
 import { storage, db } from './firebase';
 import firebase from 'firebase';
 
+
 class Camera extends Component {
     constructor(props) {
         super(props);
@@ -76,10 +77,18 @@ class Camera extends Component {
         this.setState({ image: null })
     }
 
+    send_to = () => {
+      db.collection("users").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.data().name);
+        });
+    });
+    }
+
     capture = () => {
         const img = this.webcam.getScreenshot();
         this.setState({ image: img })
-        console.log(img);
     }
 
     setRef = (webcam) => {
@@ -97,6 +106,7 @@ class Camera extends Component {
                     mirrored={true}
                 />}
                 { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture}>Capture</button> }
+
                 { this.state.image ? <button className="send" onClick={this.send}>Send</button> : null}
             </div>
         );

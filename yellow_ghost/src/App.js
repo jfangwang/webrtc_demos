@@ -14,10 +14,10 @@ const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
 const styles = {
   slide: {
-    color: '#fff',
+    // color: '#fff',
   },
   slide1: {
-    background: 'MediumSeaGreen',
+    // background: 'MediumSeaGreen',
   },
   slide2: {
     background: 'ForestGreen',

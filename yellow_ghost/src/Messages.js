@@ -4,7 +4,7 @@ import ReactTimeago from 'react-timeago';
 import './Messages.css';
 import Auth from './Auth.js';
 
-function Chat({id, email, timeStamp, imageURL, read, photoURL}) {
+function Chat({id, name, timeStamp, imageURL, read, photoURL}) {
     const open = () => {
         const photo = storage.ref(`posts/${id}`).getDownloadURL()
         .then((url) => {
@@ -36,14 +36,14 @@ function Chat({id, email, timeStamp, imageURL, read, photoURL}) {
     }
 
     return (
-        <div>
-            <div className="Chat" onClick={open}>
+        <div className="Chat" onClick={open}>
             <img src={photoURL} className="photoURL"/>
-            <h4>{email}</h4>
-            {!read && <p>NEW SNAP | <ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
-            {read && <p>OPENED</p>}
-            <img id="photo" onClick={close}/>
+            <div className="chat-info">
+                <h4>{name}</h4>
+                {!read && <p className="status"><div className="red-block"/><p className="new-snap">New Snap</p><ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
+                {read && <p>OPENED</p>}
             </div>
+            <img id="photo" onClick={close}/>
         </div>
     )
 }
@@ -65,14 +65,10 @@ function Chats() {
 
     return (
         <div className="Chats">
-            <header className="navbar">
-                <h1>Chat</h1>
-                <Auth/>
-            </header>
-            {posts.map(({data: { id, email, timeStamp, imageURL, read, photoURL}}) => (
+            {posts.map(({data: { id, name, timeStamp, imageURL, read, photoURL}}) => (
                 <Chat
                     id={id}
-                    email={email}
+                    name={name}
                     timeStamp={timeStamp}
                     imageURL={imageURL}
                     read={read}
@@ -87,6 +83,11 @@ class Messages extends Component {
     render() {
         return (
             <body>
+                <header>
+                    <Auth/>
+                    <h1>Chat</h1>
+                </header>
+                <div className="block"/>
                 <Chats/>
             </body>
 

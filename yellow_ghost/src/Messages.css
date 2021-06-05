@@ -1,45 +1,67 @@
-body {
-    font-family: Helvetica;
-    width: 100%;
+h4, h1, p {
+    margin: 0px;
+    padding: 0px;
+    color: black;
+}
+h4 {
+    font-size: 20px;
+}
+p {
+    font-size: 12px;
 }
 header {
-    background-color: mediumturquoise;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    width: 100%;
-    position: absolute;
-    top:0%;
-    left:0%;
-}
-.navbar {
     display: flex;
     flex-direction: row;
-    align-content: space-between;
+    justify-content: flex-start;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: fixed;
+    background-color: white;
+    width: 100%;
+    border-bottom: 1px grey solid;
+}
+.new-snap {
+    color: red;
+    font-weight: bold;
+    font-size: 13px;
+    margin-right: 5px;
+}
+.red-block {
+    width: 15px;
+    height: 15px;
+    background: red;
+    border-radius: 20%;
+    margin-right: 5px;
 }
 .Chats {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 .Chat {
     display: flex;
-    flex-direction: column;
-    margin: 0px;
-    align-items: end;
+    flex-direction: row;
     width: 100%;
-    border: 1px darkgreen solid;
-}
-.Chat:hover {
-    background-color: darkgreen;
-}
-h4, p {
-    margin: 0px;
-}
-#photo {
-    position: absolute;
-    top: 0%;
-    left: 0%;
+    border-top: 1px grey solid;
+    border-bottom: 1px grey solid;
+    padding-bottom: 7px;
+    padding-top: 7px;
 }
 .photoURL {
-    height:50px;
-    width:50px;
+    height: 50px;
+    width: 50px;
     border-radius: 100%;
+    margin-left: 10px;
+}
+.chat-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-left: 10px;
+}
+.status {
+    display: flex;
+    flex-direction: row;
+}
+.block {
+    padding-bottom: 59px;
 }

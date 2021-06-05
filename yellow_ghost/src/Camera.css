@@ -16,6 +16,12 @@
     position: absolute;
     bottom: 5%;
 }
+.send_to {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 10%;
+}
 .webcam{
     display:none;
 }
