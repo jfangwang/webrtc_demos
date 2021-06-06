@@ -5,12 +5,34 @@ import './Camera.css';
 import { storage, db } from './firebase';
 import firebase from 'firebase';
 
-function User_item({name}) {
+let to_users = [];
+var me = false;
+function User_item({name, email}) {
+  to_users = [];
   const select = () => {
-    console.log("selected", name);
+    var item = document.getElementById(email);
+    if (item.classList.contains("selected")) {
+      item.classList.remove("selected");
+      const index = to_users.indexOf(name);
+      to_users.splice(index, 1);
+    } else {
+      item.classList.add("selected");
+      to_users.push(name);
+    }
+
+  }
+  var displayName = firebase.auth().currentUser.displayName;
+  if (name == displayName) {
+    me = true;
+  } else {
+    me = false;
   }
   return (
-    <div id="User_item" className="User_item" onClick={select}>{name}</div>
+    <div>
+      {me ? <div id={email} className="User_item" onClick={select}>{name} (me)</div> :
+            <div id={email} className="User_item" onClick={select}>{name}</div> }
+    </div>
+
   )
 }
 
@@ -32,9 +54,10 @@ function User_list() {
     return (
         <div className="User_list">
             <h1> Send to...</h1>
-            {posts.map(({data: { name }}) => (
+            {posts.map(({data: { name, email }}) => (
                 <User_item
                     name={name}
+                    email={email}
                 />
             ))}
         </div>
@@ -100,6 +123,7 @@ class Camera extends Component {
                   photoURL: photoURL,
                   read: false,
                   timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+                  to: to_users,
                 })
               })
           })

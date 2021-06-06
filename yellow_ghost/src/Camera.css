@@ -39,9 +39,6 @@
     padding-top: 7px;
     background-color: white;
 }
-.User_item:hover {
-    background-color: cornflowerblue;
-}
 .User_list {
     display: flex;
     flex-direction: column;
