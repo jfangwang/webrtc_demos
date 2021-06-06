@@ -65,3 +65,9 @@ header {
 .block {
     padding-bottom: 59px;
 }
+#photo {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+}

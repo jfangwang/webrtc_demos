@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     position: absolute;
-    top: 5%;
+    top: 3%;
 }
 .capture {
     display: flex;
@@ -20,7 +20,7 @@
     display: flex;
     justify-content: center;
     position: absolute;
-    bottom: 10%;
+    bottom: 5%;
 }
 .webcam{
     display:none;
@@ -28,4 +28,34 @@
 .body {
     height: 100%;
     width: 100%;
+}
+.User_item {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-top: 1px grey solid;
+    border-bottom: 1px grey solid;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    background-color: white;
+}
+.User_item:hover {
+    background-color: cornflowerblue;
+}
+.User_list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    position: absolute;
+    top:0%;
+}
+h1 {
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+}
+.selected {
+    background-color: mediumseagreen;
 }

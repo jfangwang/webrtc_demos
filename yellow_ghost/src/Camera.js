@@ -1,18 +1,55 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import Webcam from "react-webcam";
 import { v4 as uuid } from "uuid";
 import './Camera.css';
 import { storage, db } from './firebase';
 import firebase from 'firebase';
 
+function User_item({name}) {
+  const select = () => {
+    console.log("selected", name);
+  }
+  return (
+    <div id="User_item" className="User_item" onClick={select}>{name}</div>
+  )
+}
 
+function User_list() {
+  const [posts, setPosts] = React.useState([]);
+
+    useEffect(() => {
+        db.collection('users')
+        .orderBy('name', 'desc')
+        .onSnapshot((snapshot) =>
+            setPosts(
+                snapshot.docs.map((doc) => ({
+                    data: doc.data(),
+                }))
+            )
+        );
+    }, [])
+
+    return (
+        <div className="User_list">
+            <h1> Send to...</h1>
+            {posts.map(({data: { name }}) => (
+                <User_item
+                    name={name}
+                />
+            ))}
+        </div>
+    )
+}
 class Camera extends Component {
     constructor(props) {
         super(props);
         this.state = {
             width: window.innerWidth,
             height: window.innerHeight,
-            image: null
+            image: null,
+            show_user_list: false,
+            show_send_button: false,
+            show_send_to: false
         }
         window.addEventListener("resize", this.update);
     }
@@ -67,6 +104,8 @@ class Camera extends Component {
               })
           })
           this.setState({ image: null});
+          this.setState({show_user_list: false});
+          this.setState({show_send_button: false, show_send_to: false});
         } else {
           console.log("Cannot send image");
         }
@@ -75,20 +114,18 @@ class Camera extends Component {
 
     close = () => {
         this.setState({ image: null })
+        this.setState({show_user_list: false});
+        this.setState({show_send_button: false, show_send_to: false});
     }
 
     send_to = () => {
-      db.collection("users").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.data().name);
-        });
-    });
+      this.setState({show_user_list: true});
+      this.setState({ show_send_button: true, show_send_to: false});
     }
 
     capture = () => {
         const img = this.webcam.getScreenshot();
-        this.setState({ image: img })
+        this.setState({ image: img, show_send_to: true });
     }
 
     setRef = (webcam) => {
@@ -105,9 +142,11 @@ class Camera extends Component {
                     audio={false}
                     mirrored={true}
                 />}
-                { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture}>Capture</button> }
 
-                { this.state.image ? <button className="send" onClick={this.send}>Send</button> : null}
+                { this.state.show_user_list ? <User_list/> : null}
+                { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture}>Capture</button> }
+                { this.state.show_send_to ? <button className="send_to" onClick={this.send_to}>Send to...</button> : null}
+                { this.state.show_send_button ? <button className="send" onClick={this.send}>Send</button> : null}
             </div>
         );
     }
