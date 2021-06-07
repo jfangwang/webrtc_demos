@@ -34,6 +34,7 @@ class Auth extends Component {
     }
 
     handleLogin() {
+        console.log("login");
         auth.signInWithPopup(provider)
         .then((result) => {
             const name = result.user.displayName;
@@ -41,6 +42,7 @@ class Auth extends Component {
             this.setState({photoURL: result.user.photoURL});
             var img = document.getElementById("profile-pic");
             img.setAttribute('src', this.state.photoURL);
+            window.location.reload();
             // Adding user to user DB
             db.collection("users").doc(email).set({
               email: email,
@@ -56,10 +58,11 @@ class Auth extends Component {
             });
 
         })
-        .catch((error) => alert(error.message));
+        .catch((error) => console.log(error.message));
 
     }
     handleLogout() {
+        console.log("logout");
         firebase.auth().signOut().then(() => {
           this.setState({loggedIn: false});
           this.setState({photoURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png'});
