@@ -17,17 +17,20 @@ class Auth extends Component {
     }
 
     componentDidMount() {
+      this.update();
+    }
+
+    update = () => {
       var img = document.getElementById("profile-pic");
-      // var user = firebase.auth().currentUser;
-      // if (user) {
-      //   this.setState({ loggedIn: true });
-      // }
       firebase.auth().onAuthStateChanged(function(user) {
         if (user != null) {
           var photoURL = user.photoURL;
+          img.setAttribute('src', photoURL);
+        } else {
+          img.setAttribute('src', "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png");
         }
-        img.setAttribute('src', photoURL);
-      });
+      })
+      this.setState({loggedIn: true});
     }
 
     handleLogin() {
@@ -61,7 +64,7 @@ class Auth extends Component {
           this.setState({loggedIn: false});
           this.setState({photoURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png'});
           var img = document.getElementById("profile-pic");
-          img.setAttribute('src', this.state.photoURL);
+          img.setAttribute('src', "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png");
         }).catch((error) => {
             console.log(error.message);
         });

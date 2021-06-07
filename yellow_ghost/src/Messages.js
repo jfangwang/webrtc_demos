@@ -82,14 +82,14 @@ function Chats() {
 class Messages extends Component {
     render() {
         return (
-            <body>
+            <div>
                 <header>
                     <Auth/>
                     <h1>Chat</h1>
                 </header>
                 <div className="block"/>
                 <Chats/>
-            </body>
+            </div>
 
         );
     }
