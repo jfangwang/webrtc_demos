@@ -22,15 +22,16 @@ function User_item({name, email}) {
 
   }
   var displayName = firebase.auth().currentUser.displayName;
-  if (name == displayName) {
+  var displayEmail = firebase.auth().currentUser.email;
+  if (name == displayName && email == displayEmail) {
     me = true;
   } else {
     me = false;
   }
   return (
     <div>
-      {me ? <div id={email} className="User_item" onClick={select}>{name} (me)</div> :
-            <div id={email} className="User_item" onClick={select}>{name}</div> }
+      {me ? <div id={email} className="User_item" onClick={select}>Me</div> :
+            <div id={email} className="User_item" onClick={select}>{name} ({email})</div> }
     </div>
 
   )
@@ -100,7 +101,7 @@ class Camera extends Component {
           name = "GUEST";
           photoURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png";
         }
-        if (this.state.image != null) {
+        if (this.state.image != null && to_users.length > 0) {
           const uploadTask = storage.ref(`posts/${id}`).putString(this.state.image, 'data_url');
           uploadTask.on(
           "state_changed",
@@ -131,7 +132,7 @@ class Camera extends Component {
           this.setState({show_user_list: false});
           this.setState({show_send_button: false, show_send_to: false});
         } else {
-          console.log("Cannot send image");
+          alert("Please selected a user");
         }
 
     }
@@ -169,8 +170,8 @@ class Camera extends Component {
 
                 { this.state.show_user_list ? <User_list/> : null}
                 { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture}>Capture</button> }
-                { this.state.show_send_to ? <button className="send_to" onClick={this.send_to}>Send to...</button> : null}
-                { this.state.show_send_button ? <button className="send" onClick={this.send}>Send</button> : null}
+                { this.state.show_send_to? <button className="send_to" onClick={this.send_to}>Send to...</button> : null}
+                { this.state.show_send_button > 0 ? <button className="send" onClick={this.send}>Send</button> : null}
             </div>
         );
     }
