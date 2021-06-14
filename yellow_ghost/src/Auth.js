@@ -39,7 +39,6 @@ class Auth extends Component {
           img.setAttribute('src', "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png");
         }
       }.bind(this))
-      console.log("after", this.state.loggedIn);
     }
 
     open_modal() {

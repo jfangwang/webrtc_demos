@@ -6,12 +6,12 @@ import Auth from './Auth.js';
 import firebase from 'firebase';
 
 function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
-    const open = () => {
-        const photo = storage.ref(`posts/${id}`).getDownloadURL()
+    const open = (id_num) => {
+        const photo = storage.ref(`posts/${id_num}`).getDownloadURL()
         .then((url) => {
             var img = document.getElementById('photo');
             img.setAttribute('src', url);
-            console.log("OPENING: ", id)
+            console.log("OPENING: ", id_num)
         })
         .catch((error) => {
             // Handle any errors
@@ -20,6 +20,13 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     }
 
     const delete_photo = () => {
+      const photo = storage.ref(`posts/${id}`).delete()
+      .then((url) => {
+          console.log("Deleted from storage: ", id);
+      })
+      .catch((error) => {
+          console.log("TRIED DELETING: ", id)
+      });
       db.collection('posts').doc(id).delete().then(() => {
         console.log("Deleted from firestore");
       }).catch((error) => {
@@ -28,22 +35,9 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     }
 
     const close = () => {
-        const photo = storage.ref(`posts/${id}`).delete()
-        .then((url) => {
-            console.log("Deleted from storage: ", id);
-        })
-        .catch((error) => {
-            console.log("TRIED DELETING: ", id)
-        });
         delete_photo()
-        // var a = db.collection('posts')
-        // console.log("A", a);
-        // var user_list = []
-        // to.forEach(element => {
-        //   if (element == email) {
-        //     console.log("user list", user_list);
-        //   }
-        // })
+        var test = db.collection("posts").doc(id)
+        console.log("test", test);
 
         var img = document.getElementById('photo');
         img.removeAttribute('src');
@@ -54,7 +48,7 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
         for (a=0;a<to.length;a++) {
             if (to[a] == user.email) {
                 return (
-                    <div className="Chat" onClick={open}>
+                    <div className="Chat" onClick={(e) => open(id)}>
                         <img src={photoURL} className="photoURL"/>
                         <div className="chat-info">
                             <h4>{name}</h4>
