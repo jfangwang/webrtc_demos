@@ -113,7 +113,7 @@ class Auth extends Component {
             account = <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.close_modal}/>
             modal = <div className="modal">
               <h2>Settings</h2>
-              <h4 onClick={this.handleLogout}>Logout</h4>
+              <h4 className="modal_item" onClick={this.handleLogout}>Logout</h4>
             </div>
         }
         else if (loggedIn == false) {

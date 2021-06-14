@@ -5,7 +5,7 @@ import './Messages.css';
 import Auth from './Auth.js';
 import firebase from 'firebase';
 
-function Chat({id, name, timeStamp, imageURL, read, photoURL, to}) {
+function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     const open = () => {
         const photo = storage.ref(`posts/${id}`).getDownloadURL()
         .then((url) => {
@@ -19,6 +19,14 @@ function Chat({id, name, timeStamp, imageURL, read, photoURL, to}) {
         });
     }
 
+    const delete_photo = () => {
+      db.collection('posts').doc(id).delete().then(() => {
+        console.log("Deleted from firestore");
+      }).catch((error) => {
+        console.error("Error removing document: ", error);
+      });
+    }
+
     const close = () => {
         const photo = storage.ref(`posts/${id}`).delete()
         .then((url) => {
@@ -27,11 +35,16 @@ function Chat({id, name, timeStamp, imageURL, read, photoURL, to}) {
         .catch((error) => {
             console.log("TRIED DELETING: ", id)
         });
-        db.collection('posts').doc(id).delete().then(() => {
-            console.log("Deleted from firestore");
-        }).catch((error) => {
-            console.error("Error removing document: ", error);
-        });
+        delete_photo()
+        // var a = db.collection('posts')
+        // console.log("A", a);
+        // var user_list = []
+        // to.forEach(element => {
+        //   if (element == email) {
+        //     console.log("user list", user_list);
+        //   }
+        // })
+
         var img = document.getElementById('photo');
         img.removeAttribute('src');
     }
@@ -39,7 +52,7 @@ function Chat({id, name, timeStamp, imageURL, read, photoURL, to}) {
     var a = 0;
     if (user) {
         for (a=0;a<to.length;a++) {
-            if (to[a] == user.displayName) {
+            if (to[a] == user.email) {
                 return (
                     <div className="Chat" onClick={open}>
                         <img src={photoURL} className="photoURL"/>
@@ -75,10 +88,11 @@ function Chats() {
 
     return (
         <div className="Chats">
-            {posts.map(({data: { id, name, timeStamp, imageURL, read, photoURL, to}}) => (
+            {posts.map(({data: { id, name, email, timeStamp, imageURL, read, photoURL, to}}) => (
                 <Chat
                     id={id}
                     name={name}
+                    email={email}
                     timeStamp={timeStamp}
                     imageURL={imageURL}
                     read={read}

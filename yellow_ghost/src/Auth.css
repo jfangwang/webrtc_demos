@@ -34,14 +34,15 @@
 .navbar {
     color: black;
 }
-h4 {
+.modal_item {
     width: 100%;
     padding-top: 20px;
     padding-bottom: 20px;
     border-top: 2px black solid;
     border-bottom: 2px black solid;
+    background-color: wheat;
 }
-h4:hover {
+.modal_item:hover {
     background-color: cornflowerblue;
     color: red;
     opacity: 90%;

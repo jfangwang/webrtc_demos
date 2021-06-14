@@ -13,11 +13,11 @@ function User_item({name, email}) {
     var item = document.getElementById(email);
     if (item.classList.contains("selected")) {
       item.classList.remove("selected");
-      const index = to_users.indexOf(name);
+      const index = to_users.indexOf(email);
       to_users.splice(index, 1);
     } else {
       item.classList.add("selected");
-      to_users.push(name);
+      to_users.push(email);
     }
 
   }
