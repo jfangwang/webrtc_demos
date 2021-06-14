@@ -10,13 +10,20 @@ class Auth extends Component {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.open_modal = this.open_modal.bind(this);
+        this.close_modal = this.close_modal.bind(this);
+        this.update = this.update.bind(this);
         this.state = {
           loggedIn: false,
           user:null,
+          modal_open: false,
           photoURL:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png'};
     }
 
     componentDidMount() {
+      window.addEventListener('afterunload', () =>{
+        this.update();
+      });
       this.update();
     }
 
@@ -26,11 +33,26 @@ class Auth extends Component {
         if (user != null) {
           var photoURL = user.photoURL;
           img.setAttribute('src', photoURL);
+          this.setState({loggedIn: true});
         } else {
+          this.setState({loggedIn: false});
           img.setAttribute('src', "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png");
         }
+      }.bind(this))
+      console.log("after", this.state.loggedIn);
+    }
+
+    open_modal() {
+      this.setState({
+        modal_open: true
       })
-      this.setState({loggedIn: true});
+    }
+
+    close_modal() {
+      this.setState({
+        modal_open: false
+      })
+      this.update();
     }
 
     handleLogin() {
@@ -85,16 +107,27 @@ class Auth extends Component {
     }
     render() {
         const loggedIn = this.state.loggedIn;
-        let account;
+        let account, modal;
 
-        if (loggedIn) {
-            account = <img id="profile-pic" onClick={this.handleLogout}/>
-        } else {
-            account = <img id="profile-pic" onClick={this.handleLogin}/>
+        if (this.state.modal_open && this.state.loggedIn) {
+            account = <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.close_modal}/>
+            modal = <div className="modal">
+              <h2>Settings</h2>
+              <h4 onClick={this.handleLogout}>Logout</h4>
+            </div>
+        }
+        else if (loggedIn == false) {
+          account = <img id="profile-pic" onClick={this.handleLogin}/>
+          modal = null
+        }
+        else {
+            account = <img id="profile-pic" onClick={this.open_modal}/>
+            modal = null
         }
         return (
-            <div>
+            <div className="navbar">
                 {account}
+                {modal}
             </div>
         );
     }

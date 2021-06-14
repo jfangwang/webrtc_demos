@@ -169,7 +169,7 @@ class Camera extends Component {
                 />}
 
                 { this.state.show_user_list ? <User_list/> : null}
-                { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture}>Capture</button> }
+                { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture} className="capture">Capture</button> }
                 { this.state.show_send_to? <button className="send_to" onClick={this.send_to}>Send to...</button> : null}
                 { this.state.show_send_button > 0 ? <button className="send" onClick={this.send}>Send</button> : null}
             </div>

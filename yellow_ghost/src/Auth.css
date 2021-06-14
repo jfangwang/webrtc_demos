@@ -10,11 +10,39 @@
 }
 #profile-pic {
     border-radius: 100%;
-    height: 30px;
-    width: 30px;
+    height: 70px;
+    width: 70px;
     margin-right: 10px;
     margin-left: 10px;
+    border: 2px solid yellow;
 }
 #profile-pic:hover {
     border-radius: 10%;
+}
+.modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    height: 900%;
+    width: 100%;
+    background-color: grey;
+
+}
+.navbar {
+    color: black;
+}
+h4 {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 2px black solid;
+    border-bottom: 2px black solid;
+}
+h4:hover {
+    background-color: cornflowerblue;
+    color: red;
+    opacity: 90%;
 }
