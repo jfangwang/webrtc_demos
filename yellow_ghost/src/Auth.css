@@ -47,3 +47,6 @@
     color: red;
     opacity: 90%;
 }
+.selected {
+    background-color: mediumseagreen;
+}
