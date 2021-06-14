@@ -5,18 +5,21 @@ import './Messages.css';
 import Auth from './Auth.js';
 import firebase from 'firebase';
 
+var user_list = [];
 function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
-    const open = (id_num) => {
-        const photo = storage.ref(`posts/${id_num}`).getDownloadURL()
-        .then((url) => {
-            var img = document.getElementById('photo');
-            img.setAttribute('src', url);
-            console.log("OPENING: ", id_num)
-        })
-        .catch((error) => {
-            // Handle any errors
-            console.log("COULD NOT GET PHOTO ", error)
-        });
+    const open = (id_num, read) => {
+        if (!read){
+          const photo = storage.ref(`posts/${id_num}`).getDownloadURL()
+          .then((url) => {
+              var img = document.getElementById('photo');
+              img.setAttribute('src', url);
+              console.log("OPENING: ", id_num)
+          })
+          .catch((error) => {
+              // Handle any errors
+              console.log("COULD NOT GET PHOTO ", error)
+          });
+        }
     }
 
     const delete_photo = () => {
@@ -35,12 +38,24 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     }
 
     const close = () => {
-        delete_photo()
-        var test = db.collection("posts").doc(id)
-        console.log("test", test);
-
-        var img = document.getElementById('photo');
-        img.removeAttribute('src');
+        var user_email = firebase.auth().currentUser.email;
+        var photo_doc = db.collection('posts').doc(id)
+        photo_doc.get().then((snapshot) => {
+          user_list = snapshot.data()["to"]
+          console.log("before", user_list);
+          const index = user_list.indexOf(user_email);
+          console.log(index);
+          user_list.splice(index, 1);
+          photo_doc.update({
+            to: user_list
+          })
+          console.log("after", user_list);
+          var img = document.getElementById('photo');
+          img.removeAttribute('src');
+          if (user_list.length == 0) {
+            delete_photo();
+          }
+        })
     }
     var user = firebase.auth().currentUser;
     var a = 0;
@@ -48,15 +63,21 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
         for (a=0;a<to.length;a++) {
             if (to[a] == user.email) {
                 return (
-                    <div className="Chat" onClick={(e) => open(id)}>
-                        <img src={photoURL} className="photoURL"/>
-                        <div className="chat-info">
+                  <>
+                    <div className="Chat" onClick={(e) => open(id, read)}>
+                    <img src={photoURL} className="photoURL"/>
+                    <div className="chat-info">
                             <h4>{name}</h4>
                             {!read && <p className="status"><div className="red-block"/><p className="new-snap">New Snap</p><ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
                             {read && <p>OPENED</p>}
                         </div>
+                    </div>
+                    <div>
+
+
                         <img id="photo" onClick={close}/>
                     </div>
+                  </>
                 )
             }
 

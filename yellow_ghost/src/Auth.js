@@ -80,7 +80,6 @@ class Auth extends Component {
 
         })
         .catch((error) => console.log(error.message));
-
     }
     handleLogout() {
         console.log("logout");
@@ -92,6 +91,7 @@ class Auth extends Component {
         }).catch((error) => {
             console.log(error.message);
         });
+        window.location.reload();
     }
     getUser() {
         var user = firebase.auth().currentUser;
