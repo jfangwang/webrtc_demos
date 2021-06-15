@@ -1,37 +1,26 @@
 h4, h1, p {
-    margin: 0px;
-    padding: 0px;
+    margin: 0em;
+    padding: 0em;
     color: black;
 }
 h4 {
-    font-size: 20px;
+    font-size: 1.4em;
 }
 p {
-    font-size: 12px;
-}
-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    position: fixed;
-    background-color: white;
-    width: 100%;
-    border-bottom: 1px grey solid;
+    font-size: 0.8em;
 }
 .new-snap {
     color: red;
     font-weight: bold;
     font-size: 13px;
-    margin-right: 5px;
+    margin-right: 0.6em;
 }
 .red-block {
-    width: 15px;
-    height: 15px;
+    width: 1.2em;
+    height: 1.2em;
     background: red;
     border-radius: 20%;
-    margin-right: 5px;
+    margin-right: 0.4em
 }
 .Chats {
     display: flex;
@@ -43,31 +32,28 @@ header {
     width: 100%;
     border-top: 1px grey solid;
     border-bottom: 1px grey solid;
-    padding-bottom: 7px;
-    padding-top: 7px;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
 }
 .photoURL {
-    height: 50px;
-    width: 50px;
+    height: 3.2em;
+    width: 3.2em;
     border-radius: 100%;
-    margin-left: 10px;
+    margin-left: 0.8em;
 }
 .chat-info {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    margin-left: 10px;
+    margin-left: 0.8em;
 }
 .status {
     display: flex;
     flex-direction: row;
 }
-.block {
-    padding-bottom: 59px;
-}
 #photo {
     position: absolute;
-    top: 0%;
-    left: 0%;
+    top: 0em;
+    left: 0em;
     width: 100%;
 }

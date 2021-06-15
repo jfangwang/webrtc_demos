@@ -55,7 +55,6 @@ function User_list() {
   try {
     var displayName = firebase.auth().currentUser.displayName;
     var displayEmail = firebase.auth().currentUser.email;
-    console.log(firebase.auth().currentUser);
   } catch {
     guest = true;
   }
