@@ -158,15 +158,28 @@ class Camera extends Component {
       };
 
     render() {
+      let webcam;
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+        // Mobile
+        webcam = <Webcam
+          ref={this.setRef}
+          videoConstraints={{facingMode: this.state.faceMode, width: this.state.height, height: this.state.width}}
+          screenshotFormat="image/jpeg"
+          audio={false}
+          mirrored={true}
+        />
+      }else{
+        webcam = <Webcam
+          ref={this.setRef}
+          videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
+          screenshotFormat="image/jpeg"
+          audio={false}
+          mirrored={false}
+        />
+      }
         return (
             <div className="body">
-                { this.state.image ? <img src={this.state.image} alt="asdf"/> : <Webcam
-                    ref={this.setRef}
-                    videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
-                    screenshotFormat="image/jpeg"
-                    audio={false}
-                    mirrored={true}
-                />}
+                { this.state.image ? <img src={this.state.image} alt="asdf"/> : webcam}
 
                 { this.state.show_user_list ? <User_list/> : null}
                 { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture} className="capture">Capture</button> }
