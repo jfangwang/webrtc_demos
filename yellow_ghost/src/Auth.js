@@ -4,6 +4,7 @@ import { auth, provider } from './firebase';
 import firebase from 'firebase';
 import React, { Component, useEffect } from 'react';
 import { db } from './firebase';
+import {delete_guest, delete_posts } from './Camera.js';
 
 let friends_list = [];
 let to_users = [];
@@ -155,6 +156,8 @@ class Auth extends Component {
     }
 
     handleLogin() {
+        delete_guest();
+        delete_posts();
         auth.signInWithPopup(provider)
         .then((result) => {
             const name = result.user.displayName;

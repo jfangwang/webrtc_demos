@@ -28,12 +28,13 @@ function User_item({name, email}) {
       to_users.push(email);
     }
   }
+  let list;
   try{
     var displayName = firebase.auth().currentUser.displayName;
     var displayEmail = firebase.auth().currentUser.email;
     guest = false;
   } catch {
-    // pass
+    guest = true;
   }
 
   if (name == displayName && email == displayEmail) {
@@ -43,10 +44,10 @@ function User_item({name, email}) {
   }
   return (
     <div>
-      {me ? <div id={email} className="User_item" onClick={select}>Me</div> :
-            <div id={email} className="User_item" onClick={select}>{name} ({email})</div> }
+    { me && !guest ? <div id={email} className="User_item" onClick={select}>Me</div> : null }
+    { !me && !guest ? <div id={email} className="User_item" onClick={select}>{name} ({email})</div>: null}
+    { guest ? <div id={email} className="User_item" onClick={select}>Guest (me)</div>: null}
     </div>
-
   )
 }
 function User_list(email) {
@@ -133,6 +134,7 @@ class Camera extends Component {
         window.addEventListener("resize", this.update);
     }
     componentDidMount() {
+      console.log("MOUNTED");
       this.update();
       window.onbeforeunload = function (evt) {
         // Cancel the event (if necessary)
@@ -144,6 +146,9 @@ class Camera extends Component {
         delete_posts();
         return null;
        }
+
+      // Mobile TESTING
+
     }
     update = () => {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
