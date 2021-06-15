@@ -1,50 +1,63 @@
-.sign-in {
-    position: absolute;
-    top: 0%;
-    left:0%;
+.screen {
+    height:100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
-.sign-out {
-    position: absolute;
-    top: 0%;
-    left:10%;
+.navbar {
+    width: 100%;
+    height: 10% !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px grey solid;
+}
+.auth_body {
+    height: 90%;
+    width: 100%;
+}
+.friends_list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 #profile-pic {
-    border-radius: 100%;
     height: 70px;
     width: 70px;
-    margin-right: 10px;
+    border-radius: 50%;
     margin-left: 10px;
-    border: 2px solid yellow;
 }
 #profile-pic:hover {
-    border-radius: 10%;
+    border-radius: 20%;
+}
+.add_friends_btn {
+    margin-right: 10px;
 }
 .modal {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: absolute;
-    top: 100%;
-    left: 0%;
-    height: 900%;
+    top:0%;
     width: 100%;
-    background-color: grey;
-
-}
-.navbar {
-    color: black;
+    background-color: white;
 }
 .modal_item {
-    width: 100%;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-top: 2px black solid;
-    border-bottom: 2px black solid;
-    background-color: wheat;
+    display: flex;
+    width: 95%;
+    justify-content: center;
+    border: 2px solid black;
+    border-radius: 5%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 0px;
 }
-.modal_item:hover {
-    background-color: cornflowerblue;
-    color: red;
+h4.modal_item:hover {
+    color: white;
+    background-color: red;
     opacity: 90%;
 }
 .selected {

@@ -80,7 +80,6 @@ function User_list() {
     return (
       <>
       <div className="User_list">
-        <h1> Friends </h1>
         {posts.map(({data: { name, email }}) => (
           <div>
           {friends_list.includes(email) ? <User_item name={name} email={email}/>: <User_item name={name} email={email}/>}
@@ -107,14 +106,19 @@ class Auth extends Component {
           loggedIn: false,
           user:null,
           modal_open: false,
-          photoURL:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png'};
-    }
+          photoURL:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png'
+        };
+        window.addEventListener('load', (event) => {
+          this.getUser();
+        });
+        }
 
     componentDidMount() {
       window.addEventListener('afterunload', () =>{
         this.update();
       });
       this.update();
+
     }
 
     update = () => {
@@ -174,7 +178,6 @@ class Auth extends Component {
             })
             .then(() => {
               this.setState({loggedIn: true});
-              console.log("Document successfully written!");
             })
             .catch((error) => {
                 console.log("Error writing document: ", error);
@@ -196,45 +199,65 @@ class Auth extends Component {
     }
     getUser() {
         var user = firebase.auth().currentUser;
-
         if (user) {
-        // User is signed in.
-            console.log(user.displayName);
+          return user
         } else {
         // No user is signed in.
-            console.log("no user found")
+        console.log("no user found")
         }
     }
     render() {
         const loggedIn = this.state.loggedIn;
-        let account, modal, friends;
+        let account, modal, add_friends;
+        console.log("logged in", loggedIn);
+        {!loggedIn ? add_friends = <button className="add_friends_btn" onClick={this.add_friends} disabled="disabled">add friends</button> :
+                 add_friends = <button className="add_friends_btn" onClick={this.add_friends}>add friends</button>}
 
         if (this.state.modal_open && this.state.loggedIn) {
             account = <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.close_modal}/>
             modal = <div className="modal">
-              <h2>Settings</h2>
-              <h4 className="modal_item" onClick={this.handleLogout}>Logout</h4>
+              <div className="navbar">
+                <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.close_modal}/>
+                <h2>Settings</h2>
+                <button className="add_friends_btn" onClick={this.add_friends}>add friends</button>
+              </div>
+                <img src={this.getUser().photoURL}/>
+                <h3>Name: {this.getUser().displayName}</h3>
+                <h3>Username: {this.getUser().email}</h3>
+                <h4 className="modal_item" onClick={this.handleLogout}>Logout</h4>
             </div>
         }
         else if (loggedIn == false) {
           account = <img id="profile-pic" onClick={this.handleLogin}/>
-          modal = null
         }
         else {
-            account = <img id="profile-pic" onClick={this.open_modal}/>
-            modal = <button onClick={this.add_friends}>add friends</button>
+          account = <img id="profile-pic" onClick={this.open_modal}/>
         }
         if (this.state.show_users) {
-          friends = <div className="modal"><User_list close={false}/></div>
-        } else {
-          friends = null
+
+          modal = <div className="modal">
+            <div className="navbar">
+              <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.add_friends}/>
+              <h2>Friends</h2>
+              <button className="add_friends_btn" onClick={this.add_friends}>add friends</button>
+            </div>
+            <div className="friends_list">
+              <User_list close={false}/>
+            </div>
+
+          </div>
         }
         return (
+          <div className="screen">
             <div className="navbar">
-                {account}
-                {modal}
-                {friends}
+              {account}
+              <h2>Chat</h2>
+              {add_friends}
             </div>
+            <div className="auth_body">
+              {modal}
+            </div>
+          </div>
         );
     }
 }

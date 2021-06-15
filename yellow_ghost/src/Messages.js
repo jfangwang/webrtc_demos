@@ -165,11 +165,7 @@ class Messages extends Component {
     render() {
         return (
             <div>
-                <header>
-                    <Auth/>
-                    <h1>Chat</h1>
-                </header>
-                <div className="block"/>
+                <Auth/>
                 <Chats/>
             </div>
 

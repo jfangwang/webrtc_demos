@@ -136,16 +136,16 @@ class Camera extends Component {
     componentDidMount() {
       console.log("MOUNTED");
       this.update();
-      window.onbeforeunload = function (evt) {
-        // Cancel the event (if necessary)
-        evt.preventDefault();
+      // window.onbeforeunload = function (evt) {
+      //   // Cancel the event (if necessary)
+      //   evt.preventDefault();
 
-        // Google Chrome requires returnValue to be set
-        evt.returnValue = '';
-        delete_guest();
-        delete_posts();
-        return null;
-       }
+      //   // Google Chrome requires returnValue to be set
+      //   evt.returnValue = '';
+      //   delete_guest();
+      //   delete_posts();
+      //   return null;
+      //  }
 
       // Mobile TESTING
 
