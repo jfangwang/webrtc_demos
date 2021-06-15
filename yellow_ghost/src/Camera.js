@@ -13,6 +13,8 @@ var me = false;
 var guest = false;
 var front_cam = true;
 var mobile = false;
+export const guest_id = uuid();
+export const guest_email = "GUEST." + guest_id + "@project_yellow_ghost.com";
 function User_item({name, email}) {
   to_users = [];
   const select = () => {
@@ -124,6 +126,20 @@ class Camera extends Component {
       }
     };
 
+    guest_login = () => {
+      db.collection("guests").doc(guest_email).set({
+        email: guest_email,
+        name: "GUEST." + guest_id,
+        friends: [guest_email]
+      })
+      .then(() => {
+        console.log("Guest logged in");
+      })
+      .catch((error) => {
+          console.log("Error writing document: ", error);
+      });
+    }
+
     send = () => {
         const id = uuid();
         var user = firebase.auth().currentUser;
@@ -138,6 +154,7 @@ class Camera extends Component {
           email = "GUEST(" + id + ")@project_yellow_ghost.com"
           name = "GUEST(" + id + ")";
           photoURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png";
+          this.guest_login()
         }
         if (this.state.image != null && to_users.length > 0) {
           const uploadTask = storage.ref(`posts/${id}`).putString(this.state.image, 'data_url');
