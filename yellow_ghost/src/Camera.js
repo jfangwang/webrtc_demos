@@ -4,9 +4,15 @@ import { v4 as uuid } from "uuid";
 import './Camera.css';
 import { storage, db } from './firebase';
 import firebase from 'firebase';
+import flipCamera from './images/flip_camera.svg';
+import xButton from './images/x_button.png';
+import { parseSync } from '@babel/core';
 
 let to_users = [];
 var me = false;
+var guest = false;
+var front_cam = true;
+var mobile = false;
 function User_item({name, email}) {
   to_users = [];
   const select = () => {
@@ -19,10 +25,15 @@ function User_item({name, email}) {
       item.classList.add("selected");
       to_users.push(email);
     }
-
   }
-  var displayName = firebase.auth().currentUser.displayName;
-  var displayEmail = firebase.auth().currentUser.email;
+  try{
+    var displayName = firebase.auth().currentUser.displayName;
+    var displayEmail = firebase.auth().currentUser.email;
+    guest = false;
+  } catch {
+    // pass
+  }
+
   if (name == displayName && email == displayEmail) {
     me = true;
   } else {
@@ -36,9 +47,14 @@ function User_item({name, email}) {
 
   )
 }
-
-function User_list() {
+function User_list(email) {
   const [posts, setPosts] = React.useState([]);
+  try {
+    var displayName = firebase.auth().currentUser.displayName;
+    var displayEmail = firebase.auth().currentUser.email;
+  } catch {
+    guest = true;
+  }
 
     useEffect(() => {
         db.collection('users')
@@ -51,17 +67,24 @@ function User_list() {
             )
         );
     }, [])
-
+    let list;
+    if (guest == false) {
+      list = <div>
+      {posts.map(({data: { name, email, friends }}) => (
+          <User_item
+              name={name}
+              email={email}
+          />
+      ))}
+      </div>
+    } else {
+      list = <User_item name="Guest" email="me"/>
+    }
     return (
-        <div className="User_list">
-            <h1> Send to...</h1>
-            {posts.map(({data: { name, email }}) => (
-                <User_item
-                    name={name}
-                    email={email}
-                />
-            ))}
-        </div>
+      <div className="User_list">
+      <h1> Send to...</h1>
+      {list}
+      </div>
     )
 }
 class Camera extends Component {
@@ -73,17 +96,32 @@ class Camera extends Component {
             image: null,
             show_user_list: false,
             show_send_button: false,
-            show_send_to: false
+            show_send_to: false,
+            faceMode: "user",
+            mirrored: false,
+            mobile: false
         }
         window.addEventListener("resize", this.update);
     }
-
+    componentDidMount() {
+      this.update();
+    }
     update = () => {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+        // Mobile
+        mobile = true;
         this.setState({
-          width: window.innerWidth,
-          height: window.innerHeight,
-          faceMode: "user"
+          mirrored: true,
+          mobile: true
         });
+      } else {
+        // Desktop
+        mobile = false;
+        this.setState({
+          mirrored: false,
+          mobile: false
+        });
+      }
     };
 
     send = () => {
@@ -97,8 +135,8 @@ class Camera extends Component {
           name = user.displayName;
           photoURL = user.photoURL;
         } else {
-          email = "GUEST"
-          name = "GUEST";
+          email = "GUEST(" + id + ")@project_yellow_ghost.com"
+          name = "GUEST(" + id + ")";
           photoURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png";
         }
         if (this.state.image != null && to_users.length > 0) {
@@ -157,8 +195,41 @@ class Camera extends Component {
         this.webcam = webcam;
       };
 
+    change_camera = () => {
+      front_cam = !front_cam;
+      if (mobile) {
+        // Mobile
+        if (front_cam) {
+          this.setState({
+            faceMode: "user",
+            mirrored: true
+          })
+        } else {
+          this.setState({
+            faceMode: "environment",
+            mirrored: false
+          })
+        }
+      } else {
+        // Desktop
+        if (front_cam) {
+          this.setState({
+            faceMode: "user",
+            mirrored: false
+          })
+        } else {
+          this.setState({
+            faceMode: "environment",
+            mirrored: false
+          })
+        }
+      }
+
+    }
+
     render() {
       let webcam;
+
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
         // Mobile
         webcam = <Webcam
@@ -166,7 +237,7 @@ class Camera extends Component {
           videoConstraints={{facingMode: this.state.faceMode, width: this.state.height, height: this.state.width}}
           screenshotFormat="image/jpeg"
           audio={false}
-          mirrored={true}
+          mirrored={this.state.mirrored}
         />
       }else{
         webcam = <Webcam
@@ -174,18 +245,28 @@ class Camera extends Component {
           videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
           screenshotFormat="image/jpeg"
           audio={false}
-          mirrored={false}
+          mirrored={this.state.mirrored}
         />
       }
         return (
             <div className="body">
-                { this.state.image ? <img src={this.state.image} alt="asdf"/> : webcam}
 
-                { this.state.show_user_list ? <User_list/> : null}
-                { this.state.image ? <button className="close" onClick={this.close}>Close</button> : <button className="capture" onClick={this.capture} className="capture">Capture</button> }
-                { this.state.show_send_to? <button className="send_to" onClick={this.send_to}>Send to...</button> : null}
-                { this.state.show_send_button > 0 ? <button className="send" onClick={this.send}>Send</button> : null}
+                { this.state.image ? <img src={this.state.image} alt="asdf"/> : webcam}
+                <div className="invisible_container">
+                  { this.state.show_user_list ? <User_list/> : null}
+                  <div className="top-tools">
+                    { this.state.image ? <img src={xButton} className="close" onClick={this.close}></img> : null }
+                    { this.state.image ? null : <img className="flip_camera" src={flipCamera} onClick={this.change_camera}></img>}
+                  </div>
+                  <div className="bottom-tools">
+                    { this.state.image ? null : <button className="capture" onClick={this.capture} className="capture"></button>}
+                    { this.state.show_send_to? <button className="send_to" onClick={this.send_to}>Send To</button> : null}
+                    { this.state.show_send_button > 0 ? <button className="send" onClick={this.send}>Send</button> : null}
+                  </div>
+                </div>
+
             </div>
+
         );
     }
 }

@@ -1,27 +1,57 @@
-.close {
+.invisible_container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top:0%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.top-tools {
+    width: 100%;
+    margin-top: 3%;
+    display: flex;
+    justify-content: flex-end;
+}
+.bottom-tools{
+    width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: 10%
+}
+.close {
     position: absolute;
-    top: 3%;
+    left: 0%;
+    top: 2%;
+    margin-left: 10px;
+    width: 7%;
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
 }
 .capture {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 5%;
+    width: 77px;
+    height: 77px;
+    background: none;
+    border: 8px solid white;
+    border-radius: 50%;
 }
-.send {
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    bottom: 5%;
+.flip_camera {
+    margin-right: 20px;
+    width: 10%;
+    transform: rotate(90deg);
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
 }
-.send_to {
-    display: flex;
-    justify-content: center;
+.send_to, .send {
     position: absolute;
-    bottom: 5%;
+    right: 0%;
+    margin-right: 20px;
+    bottom: 2%;
+    background-color: yellow;
+    border-radius: 30%;
+    font-size: 15px;
+    padding: 9px;
+    border: none;
 }
 .webcam{
     display:none;
