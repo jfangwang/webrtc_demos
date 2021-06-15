@@ -34,7 +34,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      index: 0,
+      index: 1,
       height: window.innerHeight,
       width: window.innerWidth
     };

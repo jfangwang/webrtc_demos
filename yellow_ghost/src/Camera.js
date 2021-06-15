@@ -15,7 +15,7 @@ var mobile = false;
 export var guest = false;
 const g_id = guest_id
 export const guest_email = "GUEST." + g_id + "@project_yellow_ghost.com";
-function User_item({name, email}) {
+function User_item({name, email, photoURL}) {
   to_users = [];
   const select = () => {
     var item = document.getElementById(email);
@@ -44,17 +44,18 @@ function User_item({name, email}) {
   }
   return (
     <div>
-    { me && !guest ? <div id={email} className="User_item" onClick={select}>Me</div> : null }
-    { !me && !guest ? <div id={email} className="User_item" onClick={select}>{name} ({email})</div>: null}
+    { me && !guest ? <div id={email} className="User_item" onClick={select}><img className="profile_pic" src={photoURL}/><p className="user_text">Me</p></div> : null }
+    { !me && !guest ? <div id={email} className="User_item" onClick={select}><img className="profile_pic" src={photoURL}/><p className="user_text">{name} ({email})</p></div>: null}
     { guest ? <div id={email} className="User_item" onClick={select}>Guest (me)</div>: null}
     </div>
   )
 }
-function User_list(email) {
+function User_list() {
   const [posts, setPosts] = React.useState([]);
   try {
     var displayName = firebase.auth().currentUser.displayName;
     var displayEmail = firebase.auth().currentUser.email;
+    console.log(firebase.auth().currentUser);
   } catch {
     guest = true;
   }
@@ -73,10 +74,11 @@ function User_list(email) {
     let list;
     if (guest == false) {
       list = <div>
-      {posts.map(({data: { name, email, friends }}) => (
+      {posts.map(({data: { name, email, photoURL }}) => (
           <User_item
               name={name}
               email={email}
+              photoURL={photoURL}
           />
       ))}
       </div>
@@ -85,7 +87,7 @@ function User_list(email) {
     }
     return (
       <div className="User_list">
-      <h1> Send to...</h1>
+      <h1 className="title" > Send to...</h1>
       {list}
       </div>
     )

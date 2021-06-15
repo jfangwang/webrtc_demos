@@ -63,12 +63,27 @@
 .User_item {
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
     width: 100%;
     border-top: 1px grey solid;
     border-bottom: 1px grey solid;
-    padding-bottom: 7px;
-    padding-top: 7px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 15px;
     background-color: white;
+    align-items: center;
+}
+.user_text {
+    margin-left: 15px;
+    font-size: 20px;
+}
+.title {
+    margin-bottom: 15px;
+}
+.profile_pic {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
 }
 .User_list {
     display: flex;
