@@ -2,7 +2,7 @@ import React, { Component, useEffect } from 'react';
 import Webcam from "react-webcam";
 import { v4 as uuid } from "uuid";
 import './Camera.css';
-import { storage, db } from './firebase';
+import { storage, db, guest_id } from './firebase';
 import firebase from 'firebase';
 import flipCamera from './images/flip_camera.svg';
 import xButton from './images/x_button.png';
@@ -10,11 +10,11 @@ import { parseSync } from '@babel/core';
 
 let to_users = [];
 var me = false;
-var guest = false;
 var front_cam = true;
 var mobile = false;
-export const guest_id = uuid();
-export const guest_email = "GUEST." + guest_id + "@project_yellow_ghost.com";
+export var guest = false;
+const g_id = guest_id
+export const guest_email = "GUEST." + g_id + "@project_yellow_ghost.com";
 function User_item({name, email}) {
   to_users = [];
   const select = () => {
@@ -80,7 +80,7 @@ function User_list(email) {
       ))}
       </div>
     } else {
-      list = <User_item name="Guest" email="me"/>
+      list = <User_item name={guest_email} email={guest_email}/>
     }
     return (
       <div className="User_list">
@@ -88,6 +88,33 @@ function User_list(email) {
       {list}
       </div>
     )
+}
+
+export function delete_guest(){
+  // Delete Guest Account
+  var guest = db.collection('guests').doc(guest_email);
+  guest.delete().then(() => {
+    console.log("Guest Deleted");
+  }).catch((error) => {
+    console.error("Error removing guest: ", error);
+  });
+  // Delete Posts related to the guest account
+  var guest = db.collection('guests').doc(guest_email);
+}
+
+export function delete_posts() {
+  console.log("delete posts", guest_email);
+  var posts = db.collection('posts');
+  var guest_posts = posts.where("to", "array-contains", guest_email).get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      doc.ref.delete();
+    });
+  })
+  .catch((error) => {
+      console.log("Error getting documents: ", error);
+  });
+
 }
 class Camera extends Component {
     constructor(props) {
@@ -107,6 +134,16 @@ class Camera extends Component {
     }
     componentDidMount() {
       this.update();
+      window.onbeforeunload = function (evt) {
+        // Cancel the event (if necessary)
+        evt.preventDefault();
+
+        // Google Chrome requires returnValue to be set
+        evt.returnValue = '';
+        delete_guest();
+        delete_posts();
+        return null;
+       }
     }
     update = () => {
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
@@ -124,13 +161,17 @@ class Camera extends Component {
           mobile: false
         });
       }
+      this.setState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
     };
 
     guest_login = () => {
       db.collection("guests").doc(guest_email).set({
         email: guest_email,
-        name: "GUEST." + guest_id,
-        friends: [guest_email]
+        name: "GUEST",
+        friends: [guest_email],
       })
       .then(() => {
         console.log("Guest logged in");
@@ -151,8 +192,8 @@ class Camera extends Component {
           name = user.displayName;
           photoURL = user.photoURL;
         } else {
-          email = "GUEST(" + id + ")@project_yellow_ghost.com"
-          name = "GUEST(" + id + ")";
+          email = guest_email;
+          name = "Guest";
           photoURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/2048px-Circle-icons-profile.svg.png";
           this.guest_login()
         }
@@ -199,6 +240,7 @@ class Camera extends Component {
     }
 
     send_to = () => {
+      console.log("uuid", g_id)
       this.setState({show_user_list: true});
       this.setState({ show_send_button: true, show_send_to: false});
     }

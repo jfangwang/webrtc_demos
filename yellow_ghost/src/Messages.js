@@ -1,9 +1,10 @@
 import React, { Component, useEffect } from 'react';
-import { storage, db } from './firebase';
+import { storage, db, guest_id} from './firebase';
 import ReactTimeago from 'react-timeago';
 import './Messages.css';
 import Auth from './Auth.js';
 import firebase from 'firebase';
+import {guest, guest_email}  from './Camera.js';
 
 var user_list = [];
 function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
@@ -38,28 +39,51 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     }
 
     const close = () => {
-        var user_email = firebase.auth().currentUser.email;
-        var photo_doc = db.collection('posts').doc(id)
-        photo_doc.get().then((snapshot) => {
-          user_list = snapshot.data()["to"]
-          console.log("before", user_list);
-          const index = user_list.indexOf(user_email);
-          console.log(index);
-          user_list.splice(index, 1);
-          photo_doc.update({
-            to: user_list
+        if (!guest) {
+          var user_email = firebase.auth().currentUser.email;
+          var photo_doc = db.collection('posts').doc(id)
+          photo_doc.get().then((snapshot) => {
+              user_list = snapshot.data()["to"]
+              console.log("before", user_list);
+              const index = user_list.indexOf(user_email);
+              console.log(index);
+              user_list.splice(index, 1);
+              photo_doc.update({
+              to: user_list
+              })
+              console.log("after", user_list);
+              var img = document.getElementById('photo');
+              img.removeAttribute('src');
+              if (user_list.length == 0) {
+              delete_photo();
+              }
           })
-          console.log("after", user_list);
-          var img = document.getElementById('photo');
-          img.removeAttribute('src');
-          if (user_list.length == 0) {
-            delete_photo();
-          }
-        })
+        } else {
+          var user_email = guest_email;
+          var photo_doc = db.collection('posts').doc(id)
+          photo_doc.get().then((snapshot) => {
+              user_list = snapshot.data()["to"]
+              console.log("before", user_list);
+              const index = user_list.indexOf(user_email);
+              console.log(index);
+              user_list.splice(index, 1);
+              photo_doc.update({
+              to: user_list
+              })
+              console.log("after", user_list);
+              var img = document.getElementById('photo');
+              img.removeAttribute('src');
+              if (user_list.length == 0) {
+              delete_photo();
+              }
+          })
+        }
+
     }
     var user = firebase.auth().currentUser;
     var a = 0;
     if (user) {
+        // User logged in
         for (a=0;a<to.length;a++) {
             if (to[a] == user.email) {
                 return (
@@ -68,13 +92,31 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
                     <img src={photoURL} className="photoURL"/>
                     <div className="chat-info">
                             <h4>{name}</h4>
-                            {!read && <p className="status"><div className="red-block"/><p className="new-snap">New Snap</p><ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p>}
-                            {read && <p>OPENED</p>}
+                            {!read ? <p className="status"><div className="red-block"/><p className="new-snap">New Snap</p><ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p> : <p>OPENED</p>}
                         </div>
                     </div>
                     <div>
+                        <img id="photo" onClick={close}/>
+                    </div>
+                  </>
+                )
+            }
 
-
+        }
+    } else {
+        // Guest
+        for (a=0;a<to.length;a++) {
+            if (to[a] == guest_email) {
+                return (
+                  <>
+                    <div className="Chat" onClick={(e) => open(id, read)}>
+                    <img src={photoURL} className="photoURL"/>
+                    <div className="chat-info">
+                            <h4>{name}</h4>
+                            {!read ? <p className="status"><div className="red-block"/><p className="new-snap">New Snap</p><ReactTimeago date={new Date(timeStamp?.toDate()).toUTCString()}/></p> : <p>OPENED</p>}
+                        </div>
+                    </div>
+                    <div>
                         <img id="photo" onClick={close}/>
                     </div>
                   </>

@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { v4 as uuid } from 'uuid';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyCd54FSEQiit25ckDbJC7F9j6QzxhmY40Q",
@@ -16,5 +17,5 @@ const auth = firebase.auth();
 const storage = firebase.storage();
 // Google auth as a provider for this app, the popup
 const provider = new firebase.auth.GoogleAuthProvider();
-
-export { db, auth, storage, provider };
+const guest_id = uuid();
+export { db, auth, storage, provider, guest_id };
