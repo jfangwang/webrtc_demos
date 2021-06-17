@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import React, { Component, useEffect } from 'react';
 import { db } from './firebase';
 import {delete_guest, delete_posts } from './Camera.js';
+import addFriend from './images/add_friend.png';
 
 let friends_list = [];
 let to_users = [];
@@ -210,8 +211,8 @@ class Auth extends Component {
         const loggedIn = this.state.loggedIn;
         let account, modal, add_friends;
         console.log("logged in", loggedIn);
-        {!loggedIn ? add_friends = <button className="add_friends_btn" onClick={this.add_friends} disabled="disabled">add friends</button> :
-                 add_friends = <button className="add_friends_btn" onClick={this.add_friends}>add friends</button>}
+        {!loggedIn ? add_friends = <img src={addFriend} className="add_friends_btn" onClick={this.add_friends} disabled="disabled"></img> :
+                 add_friends = <img src={addFriend} className="add_friends_btn" onClick={this.add_friends}></img>}
 
         if (this.state.modal_open && this.state.loggedIn) {
             account = <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.close_modal}/>
@@ -219,7 +220,7 @@ class Auth extends Component {
               <div className="navbar">
                 <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.close_modal}/>
                 <h2>Settings</h2>
-                <button className="add_friends_btn" onClick={this.add_friends}>add friends</button>
+                <img src={addFriend} className="add_friends_btn" onClick={this.add_friends}></img>
               </div>
                 <img src={this.getUser().photoURL}/>
                 <h3>Name: {this.getUser().displayName}</h3>
@@ -239,7 +240,7 @@ class Auth extends Component {
             <div className="navbar">
               <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.add_friends}/>
               <h2>Friends</h2>
-              <button className="add_friends_btn" onClick={this.add_friends}>add friends</button>
+              <img src={addFriend} className="add_friends_btn" onClick={this.add_friends}></img>
             </div>
             <div className="friends_list">
               <User_list close={false}/>
