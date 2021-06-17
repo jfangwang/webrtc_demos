@@ -211,7 +211,7 @@ class Auth extends Component {
         const loggedIn = this.state.loggedIn;
         let account, modal, add_friends;
         console.log("logged in", loggedIn);
-        {!loggedIn ? add_friends = <img src={addFriend} className="add_friends_btn" onClick={this.add_friends} disabled="disabled"></img> :
+        {!loggedIn ? add_friends = <img className="add_friends_btn"></img> :
                  add_friends = <img src={addFriend} className="add_friends_btn" onClick={this.add_friends}></img>}
 
         if (this.state.modal_open && this.state.loggedIn) {
