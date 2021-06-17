@@ -220,7 +220,7 @@ class Auth extends Component {
               <div className="navbar">
                 <img id="profile-pic" src="https://cdn1.iconfinder.com/data/icons/arrows-vol-1-4/24/dropdown_arrow-512.png" onClick={this.close_modal}/>
                 <h2>Settings</h2>
-                <img src={addFriend} className="add_friends_btn" onClick={this.add_friends}></img>
+                <img className="add_friends_btn"></img>
               </div>
                 <img src={this.getUser().photoURL}/>
                 <h3>Name: {this.getUser().displayName}</h3>

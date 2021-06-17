@@ -56,7 +56,6 @@
     margin: 0px;
 }
 h4.modal_item:hover {
-    color: white;
     background-color: red;
     opacity: 90%;
 }
