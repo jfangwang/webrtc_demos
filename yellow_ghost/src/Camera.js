@@ -151,15 +151,18 @@ class Camera extends Component {
 
     }
     update = () => {
+      console.log("update")
       if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+        console.log("You're on mobile")
         // Mobile
         mobile = true;
-        this.setState({
-          mirrored: true,
-          mobile: true
-        });
+        // this.setState({
+        //   mirrored: true,
+        //   mobile: true
+        // });
       } else {
         // Desktop
+        console.log("you're not on mobile")
         mobile = false;
         this.setState({
           mirrored: false,
@@ -266,7 +269,7 @@ class Camera extends Component {
         if (front_cam) {
           this.setState({
             faceMode: "user",
-            mirrored: true
+            // mirrored: true
           })
         } else {
           this.setState({
@@ -309,7 +312,7 @@ class Camera extends Component {
           videoConstraints={{facingMode: this.state.faceMode, width: this.state.width, height: this.state.height}}
           screenshotFormat="image/jpeg"
           audio={false}
-          mirrored={this.state.mirrored}
+          mirrored={false}
         />
       }
         return (
