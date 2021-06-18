@@ -1,0 +1,94 @@
+body {
+    font-family: Tahoma;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #fffc00;
+    background-image: url("ghost_drawing.svg");
+}
+h4, a {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+}
+h4 {
+    font-size: 1em;
+}
+div, header {
+    border-radius: 2em;
+}
+.body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.snap_icon {
+    height: 4em;
+    width: 4em;
+}
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #ffb901;
+    align-items: center;
+    overflow: hidden;
+
+}
+.navbar a:nth-child(1){
+    background: none;
+}
+a {
+    text-decoration:none;
+    color: white;
+    padding: 1em;
+    border-radius: 1em;
+    background: #ee9b0f;
+}
+a:hover {
+    color: black;
+    background: #fff67d;
+    opacity: 80%;
+}
+.body div {
+    margin-top: 2em;
+    padding: 2em;
+    background-color:#ffd800;
+    width: 90%;
+}
+.body div:hover:not(:nth-child(2)) {
+    opacity: 70%;
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+}
+.accounts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.guest_user {
+    display: flex;
+    flex-direction: row !important;
+}
+.img_icon {
+    height: 3em;
+    height: 3em;
+    margin-left: 1em;
+}
+.twitter {
+    height: 2em;
+}
+.github {
+    height: 2em;
+}
+.linkedin {
+    height: 2em;
+}
+.linkedin, .twitter, .github {
+    margin-right: 1em;
+}
+.contact div  {
+    background: #ffbe00;
+}
