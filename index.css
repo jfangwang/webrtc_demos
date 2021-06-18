@@ -75,6 +75,7 @@ a:hover {
 .guest_user {
     display: flex;
     flex-direction: row !important;
+    margin-top: 2em;
 }
 .img_icon {
     height: 3em;

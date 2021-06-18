@@ -58,7 +58,7 @@ a:hover {
     background-color:#ffd800;
     width: 90%;
 }
-.body div:hover:not(:nth-child(2)) {
+.body div:hover:not(:nth-child(1)) {
     opacity: 70%;
     -webkit-filter: invert(100%);
     filter: invert(100%);
@@ -71,6 +71,7 @@ a:hover {
 .guest_user {
     display: flex;
     flex-direction: row !important;
+    margin-top: 2em;
 }
 .img_icon {
     height: 3em;
