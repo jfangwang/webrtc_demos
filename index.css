@@ -1,4 +1,5 @@
 body {
+    font-family: Tahoma;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -15,6 +16,9 @@ h4, a {
 h4 {
     font-size: 1em;
 }
+div, header {
+    border-radius: 2em;
+}
 .body {
     display: flex;
     flex-direction: column;
@@ -25,32 +29,43 @@ h4 {
     width: 4em;
 }
 .navbar {
-    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: coral;
+    background-color: #ffb901;
     align-items: center;
     overflow: hidden;
 
+}
+.navbar a:nth-child(1){
+    background: none;
+}
+.navbar a:hover:nth-child(1){
+    -webkit-filter: invert(20%);
+    filter: invert(20%);
 }
 a {
     text-decoration:none;
     color: white;
     padding: 1em;
     border-radius: 1em;
-    background: #5CBCFF;
+    background: #ee9b0f;
 }
 a:hover {
-    color: white;
-    background: #A3D9FF;
-}
-.navbar a {
+    color: black;
+    background: #fff67d;
+    opacity: 80%;
 }
 .body div {
     margin-top: 2em;
-    padding: 5em;
-    background-color:navajowhite;
+    padding: 2em;
+    background-color:#ffd800;
+    width: 90%;
+}
+.body div:hover:not(:first-child) {
+    opacity: 70%;
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
 }
 .accounts {
     display: flex;
@@ -60,12 +75,6 @@ a:hover {
 .guest_user {
     display: flex;
     flex-direction: row !important;
-}
-.user {
-    background: cornflowerblue;
-}
-.guest {
-    background: cornsilk
 }
 .img_icon {
     height: 3em;
@@ -85,6 +94,5 @@ a:hover {
     margin-right: 1em;
 }
 .contact div  {
-    background: blue;
-    width: 100%;
+    background: #ffbe00;
 }
