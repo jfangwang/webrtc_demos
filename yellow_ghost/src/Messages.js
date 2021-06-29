@@ -10,7 +10,7 @@ var user_list = [];
 function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     const open = (id_num, read) => {
         if (!read){
-          const photo = storage.ref(`posts/${id_num}`).getDownloadURL()
+          storage.ref(`posts/${id_num}`).getDownloadURL()
           .then((url) => {
               var img = document.getElementById('photo');
               img.setAttribute('src', url);
@@ -24,7 +24,7 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     }
 
     const delete_photo = () => {
-      const photo = storage.ref(`posts/${id}`).delete()
+      storage.ref(`posts/${id}`).delete()
       .then((url) => {
           console.log("Deleted from storage: ", id);
       })
@@ -39,9 +39,11 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
     }
 
     const close = () => {
+        var user_email;
+        var photo_doc;
         if (!guest) {
-          var user_email = firebase.auth().currentUser.email;
-          var photo_doc = db.collection('posts').doc(id)
+          user_email = firebase.auth().currentUser.email;
+          photo_doc = db.collection('posts').doc(id)
           photo_doc.get().then((snapshot) => {
               user_list = snapshot.data()["to"]
               console.log("before", user_list);
@@ -59,8 +61,8 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
               }
           })
         } else {
-          var user_email = guest_email;
-          var photo_doc = db.collection('posts').doc(id)
+          user_email = guest_email;
+          photo_doc = db.collection('posts').doc(id)
           photo_doc.get().then((snapshot) => {
               user_list = snapshot.data()["to"]
               console.log("before", user_list);
@@ -81,11 +83,11 @@ function Chat({id, name, email, timeStamp, imageURL, read, photoURL, to}) {
 
     }
     var user = firebase.auth().currentUser;
-    var a = 0;
+    var index = 0;
     if (user) {
         // User logged in
-        for (a=0;a<to.length;a++) {
-            if (to[a] == user.email) {
+        for (index=0;index<to.length;index++) {
+            if (to[index] == user.email) {
                 return (
                   <>
                     <div className="Chat" onClick={(e) => open(id, read)}>

@@ -6,7 +6,6 @@ import { storage, db, guest_id } from './firebase';
 import firebase from 'firebase';
 import flipCamera from './images/flip_camera.svg';
 import xButton from './images/x_button.png';
-import { parseSync } from '@babel/core';
 
 let to_users = [];
 var me = false;

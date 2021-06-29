@@ -1,7 +1,5 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
 import './App.css';
@@ -13,20 +11,11 @@ import FaceDetection from './FaceDetection.js';
 const BindKeyboardSwipeableViews = bindKeyboard(SwipeableViews);
 
 const styles = {
-  slide: {
-    // color: '#fff',
-  },
   slide1: {
-    // background: 'MediumSeaGreen',
+    background: 'MediumSeaGreen',
   },
   slide2: {
-    background: 'ForestGreen',
-  },
-  slide3: {
     background: 'DodgerBlue',
-  },
-  slide4: {
-    background: 'DeepPink',
   }
 };
 class App extends React.Component {
@@ -74,7 +63,7 @@ class App extends React.Component {
           </Helmet>
           <Messages />
         </div>
-        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide3)} className="camera">
+        <div style={Object.assign({width: this.state.width, height: this.state.height}, styles.slide, styles.slide2)} className="camera">
           <Helmet>
             <meta name="viewport" content="height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
           </Helmet>
