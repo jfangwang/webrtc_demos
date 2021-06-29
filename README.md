@@ -1,3 +1,4 @@
+![Project Yellow Ghost Image](https://raw.githubusercontent.com/jfangwang/webrtc_demos/main/snapchat-clone.PNG)
 # Project Yellow Ghost
 
 ## What is Project Yellow Ghost?
